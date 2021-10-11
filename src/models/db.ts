@@ -23,7 +23,7 @@ class Conn {
     this.conn = mysql.createConnection(this.config);
   };
 
-  send (message: string, payload: any) {
+  send (message: string, payload: any) : Promise<any> {
     return new Promise((resolve, reject) => {
       this.conn.query(message, payload, (err: any, res: any) => {
         if (err) {

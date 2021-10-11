@@ -1,4 +1,4 @@
-import getHash from './getHash';
+import makeHash from './makeHash';
 import Conn from '../db';
 
 interface User {
@@ -10,8 +10,8 @@ interface User {
 const addUserToDB = async (user: User) : Promise<string> => {
   const conn = new Conn();
 
-  const hashEmail = await getHash(user.email);
-  const hashPword = await getHash(user.pword);
+  const hashEmail = await makeHash(user.email);
+  const hashPword = await makeHash(user.pword);
 
   const m = "INSERT INTO user SET ?";
   const p = {

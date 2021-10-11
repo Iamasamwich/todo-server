@@ -1,5 +1,4 @@
 import Conn from '../db';
-import getHash from './getHash';
 
 const checkIfUserInDB = async (email : string) : Promise<Boolean> => {
   const conn = new Conn();

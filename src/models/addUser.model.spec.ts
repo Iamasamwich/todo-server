@@ -3,7 +3,6 @@ import addUserModel from "./addUser.model";
 import addUserToDB from "./functions/addUserToDB";
 import checkIfUserInDB from "./functions/checkIfUserInDB";
 import deleteUserFromDB from "./functions/deleteUserFromDB";
-import getHash from "./functions/getHash";
 
 describe('/models/functions/addUserToDB', () => {
 
@@ -53,10 +52,6 @@ describe('/models/functions/addUserToDB', () => {
     .then(resp => {
       expect(req.session.userId).toBeTruthy();
       expect(req.session.loggedIn).toBe(true);
-    })
-    .catch(err => {
-      console.log('qq', err);
-      
     });
   });
 
