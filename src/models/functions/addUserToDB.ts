@@ -7,7 +7,7 @@ interface User {
   pword: string;
 }
 
-const addUserToDB = async (user: User) : Promise<{status: number, message: string}> => {
+const addUserToDB = async (user: User) : Promise<string> => {
   const conn = new Conn();
 
   const hashEmail = await getHash(user.email);
@@ -22,7 +22,7 @@ const addUserToDB = async (user: User) : Promise<{status: number, message: strin
   };
 
   return conn.send(m, p)
-  .then(() => ({status: 201, message: 'user added'}))
+  .then(() => hashEmail)
   .finally(() => {
     conn.end();
   });
