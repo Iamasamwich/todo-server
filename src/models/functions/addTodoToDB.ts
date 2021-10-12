@@ -1,4 +1,5 @@
 import {Request} from 'express';
+import convertDateFormat from './convertDateFormat';
 
 import Conn from "../db";
 
@@ -9,15 +10,11 @@ const addTodoToDB = (req : Request) => {
   const p = {
     todo: req.body.todo,
     userId: req.session.userId,
-    dueDate: req.body.dueDate,
-    done: false
+    dueDate: convertDateFormat(req.body.dueDate),
+    done: req.body.done
   };
 
   return conn.send(m, p)
-  .then(resp => {
-    console.log(resp);
-    return resp;
-  })
   .finally(() => {
     conn.end();
   });

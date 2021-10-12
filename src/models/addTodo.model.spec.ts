@@ -78,7 +78,7 @@ describe('addTodoModel', () => {
   });
 
   test('it 406s if the todo isnt a string', () => {
-    const req = {body: {todo: 1}, session: {loggedIn: true, userId: testUserId}} as Request;
+    const req = {body: {todo: 1, dueDate: 'string', done: false}, session: {loggedIn: true, userId: testUserId}} as Request;
 
     return addTodoModel(req)
     .catch(err => {
@@ -90,8 +90,9 @@ describe('addTodoModel', () => {
   test('it 406s if the date is the wrong format', () => {
     const req = {
       body: {
-        todo: 1, 
-        dueDate: '21-10-11'
+        todo: 'test todo', 
+        dueDate: '21-10-11',
+        done: false
       }, 
       session: {
         loggedIn: true, 
@@ -105,11 +106,51 @@ describe('addTodoModel', () => {
     });
   });
 
-  test('it adds a todo', () => {
+  test('it 406s if there isnt done in the body', () => {
     const req = {
       body: {
         todo: 'test todo', 
         dueDate: '2021-10-11'
+      }, 
+      session: {
+        loggedIn: true, 
+        userId: testUserId
+      }
+    } as Request;
+
+    return addTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406)
+      expect(err.message).toBe('invalid');
+    });
+  });
+
+  test('it 406s if body.done is the wrong type', () => {
+    const req = {
+      body: {
+        todo: 'test todo', 
+        dueDate: '2021-10-11',
+        done: 'hello'
+      }, 
+      session: {
+        loggedIn: true, 
+        userId: testUserId
+      }
+    } as Request;
+
+    return addTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid');
+    });
+  });
+
+  test('it adds a todo', () => {
+    const req = {
+      body: {
+        todo: 'test todo', 
+        dueDate: '2021-10-11',
+        done: false
       }, 
       session: {
         loggedIn: true, 

@@ -7,6 +7,7 @@ interface Config {
   user: string | undefined;
   password: string | undefined;
   database: string | undefined;
+  dateStrings: boolean;
 };
 
 class Conn {
@@ -18,7 +19,8 @@ class Conn {
       host: process.env.DBHOST,
       user: process.env.DBUSER,
       password: process.env.DBPWORD,
-      database: process.env.DBNAME
+      database: process.env.DBNAME,
+      dateStrings: true
     };
     this.conn = mysql.createConnection(this.config);
   };
