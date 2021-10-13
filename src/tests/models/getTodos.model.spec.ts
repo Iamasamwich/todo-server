@@ -93,13 +93,15 @@ describe('getTodosModel', ()  => {
             id: resp.todos[0].id,
             todo: 'getTodos test 1',
             dueDate: '2021-11-01',
-            done: 0
+            done: 0,
+            steps: []
           },
           {
             id: resp.todos[1].id,
             todo: 'getTodos test 2',
             dueDate: '2021-11-02',
-            done: 1
+            done: 1,
+            steps: []
           }
         ]
       });

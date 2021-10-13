@@ -1,6 +1,7 @@
 import { Request } from "express";
 import checkUserIsLoggedIn from "./functions/checkUserIsLoggedIn";
 import getTodosFromDB from "./functions/getTodosFromDB";
+import getTodoSteps from './functions/getTodoSteps';
 
 const getTodosModel = (req: Request) => {
   return checkUserIsLoggedIn(req)
@@ -9,7 +10,8 @@ const getTodosModel = (req: Request) => {
     return;
   })
   .then(() => getTodosFromDB(req.session.userId))
-  .then(todos => ({status: 200, message: 'todos fetched', todos}))
+  .then(todos => Promise.all(todos.map(todo => getTodoSteps(todo))))
+  .then(todosWithSteps => ({status: 200, message: 'todos fetched', todos: todosWithSteps}))
 };
 
 export default getTodosModel;
