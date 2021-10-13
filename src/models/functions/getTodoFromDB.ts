@@ -19,6 +19,9 @@ const getTodoFromDB = (id: number) : Promise<Todo> => {
     if (resp.length === 0) throw ({status: 404, message: 'todo not found'});
     return resp[0];
   })
+  .finally(() => {
+    conn.end();
+  })
 };
 
 export default getTodoFromDB;

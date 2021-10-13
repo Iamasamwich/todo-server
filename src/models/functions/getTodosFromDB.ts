@@ -1,14 +1,13 @@
 import Conn from "../db";
 
 interface Todo {
-  id: number,
-  userId: string;
+  id: number;
   todo: string;
   done: boolean;
   dueDate: string;
 };
 
-const getTodosFromDB = (userId : string) : Promise<Todo[]> => {
+const getTodosFromDB = (userId : string | undefined) : Promise<Todo[]> => {
   const conn = new Conn();
 
   const m = "SELECT * FROM todo WHERE userId = ?;";
@@ -20,7 +19,6 @@ const getTodosFromDB = (userId : string) : Promise<Todo[]> => {
     const todos = resp.map((todo : Todo) => {
       return {
         id: todo.id,
-        userId: todo.userId,
         done: todo.done,
         dueDate: todo.dueDate,
         todo: todo.todo

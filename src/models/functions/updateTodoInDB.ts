@@ -1,4 +1,5 @@
 import Conn from "../db";
+import convertDateFormat from "./convertDateFormat";
 
 interface NewTodo {
   done: boolean;
@@ -23,7 +24,7 @@ const updateTodoInDB = (todo: Todo, newTodo: NewTodo) => {
     {
       done: newTodo.done,
       todo: newTodo.todo,
-      dueDate: newTodo.dueDate
+      dueDate: convertDateFormat(newTodo.dueDate)
     },
     todo.id
   ];

@@ -1,8 +1,8 @@
 import { Request } from "express";
-import addTodoModel from "./addTodo.model";
-import addUserToDB from "./functions/addUserToDB";
-import deleteUserFromDB from "./functions/deleteUserFromDB";
-import getUserDetails from "./functions/getUserDetails";
+import addTodoModel from "../../models/addTodo.model";
+import addUserToDB from "../../models/functions/addUserToDB";
+import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
+import getUserDetails from "../../models/functions/getUserDetails";
 
 describe('addTodoModel', () => {
 

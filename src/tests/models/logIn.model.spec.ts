@@ -1,8 +1,8 @@
 import {Request} from 'express';
 
-import addUserToDB from "./functions/addUserToDB";
-import deleteUserFromDB from "./functions/deleteUserFromDB";
-import logInModel from "./logIn.model";
+import addUserToDB from "../../models/functions/addUserToDB";
+import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
+import logInModel from "../../models/logIn.model";
 
 describe('logIn.model', () => {
 

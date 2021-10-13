@@ -1,8 +1,8 @@
 import { Request } from "express";
-import addUserModel from "./addUser.model";
-import addUserToDB from "./functions/addUserToDB";
-import checkIfUserInDB from "./functions/checkIfUserInDB";
-import deleteUserFromDB from "./functions/deleteUserFromDB";
+import addUserModel from "../../models/addUser.model";
+import addUserToDB from "../../models/functions/addUserToDB";
+import checkIfUserInDB from "../../models/functions/checkIfUserInDB";
+import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 
 describe('/models/functions/addUserToDB', () => {
 
