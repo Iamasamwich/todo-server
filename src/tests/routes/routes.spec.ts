@@ -1,10 +1,10 @@
 import express from "express";
 import session from "express-session";
 import request from 'supertest';
-import users from '../controllers';
-import deleteUserFromDB from "../models/functions/deleteUserFromDB";
-import getUserDetails from "../models/functions/getUserDetails";
-import routes from './index';
+import users from '../../controllers';
+import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
+import getUserDetails from "../../models/functions/getUserDetails";
+import routes from "../../routes";
 
 const app = express();
 
