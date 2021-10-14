@@ -1,5 +1,5 @@
 import { Request } from "express";
-import addUserModel from "../../models/addUser.model";
+import addUserModel from "../../models/addUserModel";
 import addUserToDB from "../../models/functions/addUserToDB";
 import checkIfUserInDB from "../../models/functions/checkIfUserInDB";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
-import addUserModel from "../../models/addUser.model";
+import addUserModel from "../../models/addUserModel";
 
-const addUserController = (req: Request, res: Response) => {
+const addUser = (req: Request, res: Response) => {
   addUserModel(req)
   .then((resp) => res.status(resp.status).json(resp))
   .catch(err => {
@@ -10,4 +10,4 @@ const addUserController = (req: Request, res: Response) => {
   });
 };
 
-export default addUserController;
+export default addUser;

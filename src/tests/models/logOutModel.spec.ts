@@ -1,5 +1,5 @@
 import { Request } from "express";
-import logOutModel from "../../models/logOut.model";
+import logOutModel from "../../models/logOutModel";
 
 describe('logOutModel', () => {
   test('it logs the user out', () => {

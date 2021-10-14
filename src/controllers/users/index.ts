@@ -1,11 +1,11 @@
-import addUserController from "./addUserController";
-import logInUserController from './logInUserController';
-import logOutUserController from "./logOutUserController";
+import addUser from "./addUser";
+import logInUser from './logInUser';
+import logOutUser from "./logOutUser";
 
 const users = {
-  addUserController,
-  logInUserController,
-  logOutUserController
+  addUser,
+  logInUser,
+  logOutUser
 }
 
 export default users;

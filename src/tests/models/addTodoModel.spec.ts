@@ -1,5 +1,5 @@
 import { Request } from "express";
-import addTodoModel from "../../models/addTodo.model";
+import addTodoModel from "../../models/addTodoModel";
 import addUserToDB from "../../models/functions/addUserToDB";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 import getUserDetails from "../../models/functions/getUserDetails";
