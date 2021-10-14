@@ -1,31 +1,22 @@
 import makeHash from './makeHash';
 import Conn from '../db';
+import { Request } from 'express';
 
-interface User {
-  email: string;
-  name: string;
-  pword: string;
-}
+const addUserToDB = async (conn : Conn, req : Request) : Promise<string> => {
 
-const addUserToDB = async (user: User) : Promise<string> => {
-  const conn = new Conn();
-
-  const hashEmail = await makeHash(user.email);
-  const hashPword = await makeHash(user.pword);
+  const hashEmail = await makeHash(req.body.email);
+  const hashPword = await makeHash(req.body.pword);
 
   const m = "INSERT INTO user SET ?";
   const p = {
     id: hashEmail,
-    email: user.email,
-    name: user.name,
+    email: req.body.email,
+    name: req.body.name,
     pword: hashPword
   };
 
   return conn.send(m, p)
-  .then(() => hashEmail)
-  .finally(() => {
-    conn.end();
-  });
+  .then(() => hashEmail);
 };
 
 export default addUserToDB;

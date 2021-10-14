@@ -1,7 +1,6 @@
 import Conn from '../db';
 
-const checkIfUserInDB = async (email : string) : Promise<Boolean> => {
-  const conn = new Conn();
+const checkIfUserInDB = async (conn : Conn, email : string) : Promise<Boolean> => {
 
   const m = 'SELECT * FROM user WHERE email = ?';
   const p = email;
@@ -13,9 +12,6 @@ const checkIfUserInDB = async (email : string) : Promise<Boolean> => {
     } else {
       return false;
     };
-  })
-  .finally(() => {
-    conn.end();
   });
 };
 

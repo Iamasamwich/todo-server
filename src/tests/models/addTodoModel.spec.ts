@@ -1,5 +1,6 @@
 import { Request } from "express";
 import addTodoModel from "../../models/addTodoModel";
+import Conn from "../../models/db";
 import addUserToDB from "../../models/functions/addUserToDB";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 import getUserDetails from "../../models/functions/getUserDetails";
@@ -51,11 +52,24 @@ describe('addTodoModel', () => {
   });
 
   test('add user for testing', async () => {
-    return await addUserToDB({email: 'add user test email', name: 'test name', pword: 'test pword'})
-    .then(() => getUserDetails('add user test email'))
+
+    const conn = new Conn();
+
+    const req = {
+      session: {},
+      body: {
+        email: 'add user test email', 
+        name: 'test name', 
+        pword: 'test pword'
+      }
+    } as Request;
+
+    return await addUserToDB(conn, req)
+    .then(() => getUserDetails(conn, 'add user test email'))
     .then(resp => {
       testUserId = resp.id;
-    });
+    })
+    .finally(() => conn.end());
   });
 
   test('it 406s without a body', () => {

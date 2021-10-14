@@ -8,8 +8,7 @@ interface Todo {
   dueDate: string;
 };
 
-const getTodoFromDB = (id: number) : Promise<Todo> => {
-  const conn = new Conn();
+const getTodoFromDB = (conn: Conn, id: number) : Promise<Todo> => {
 
   const m = "SELECT * FROM todo WHERE id = ?;";
   const p = id;
@@ -18,10 +17,7 @@ const getTodoFromDB = (id: number) : Promise<Todo> => {
   .then(resp => {
     if (resp.length === 0) throw ({status: 404, message: 'todo not found'});
     return resp[0];
-  })
-  .finally(() => {
-    conn.end();
-  })
+  });
 };
 
 export default getTodoFromDB;

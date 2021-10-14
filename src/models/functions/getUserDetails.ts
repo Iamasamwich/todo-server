@@ -7,8 +7,7 @@ interface GetUserDetails {
   pword: string;
 };
 
-const getUserDetails = async (email: string): Promise<GetUserDetails> => {
-  const conn = new Conn();
+const getUserDetails = async (conn : Conn, email: string): Promise<GetUserDetails> => {
 
   const m = 'select * from user where email=?'
   const p = email;
@@ -19,9 +18,6 @@ const getUserDetails = async (email: string): Promise<GetUserDetails> => {
       throw ({status: 404, message: 'user not found'});
     };
     return resp[0];
-  })
-  .finally(() => {
-    conn.end();
   });
 };
 

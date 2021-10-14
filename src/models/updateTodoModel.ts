@@ -1,4 +1,5 @@
 import { Request } from "express";
+import Conn from "./db";
 import checkIfUserIdExists from "./functions/checkIfUserIdExists";
 import checkUserIsLoggedIn from "./functions/checkUserIsLoggedIn";
 import updateTodoInDB from "./functions/updateTodoInDB";
@@ -17,20 +18,22 @@ interface FullTodo extends Todo {
 
 const updateTodoModel = (req : Request) : Promise<{status: number, message: string, todo: Todo}> => {
 
+  const conn = new Conn();
+
   return checkUserIsLoggedIn(req)
   .then(resp => {
     if (!resp) throw ({status: 401, message: 'not authorised'})
     return;
   })
-  .then(() => checkIfUserIdExists(req.session.userId))
+  .then(() => checkIfUserIdExists(conn, req.session.userId))
   .then(() => validateNewTodoReq(req))
-  .then(() => getTodoFromDB(req.body.id))
+  .then(() => getTodoFromDB(conn, req.body.id))
   .then(todo => {
     if (todo.userId !== req.session.userId) throw ({status: 401, message: 'not authorised'});
     return todo;
   })
-  .then((todo : FullTodo) => updateTodoInDB(todo, req.body))
-  .then(() => getTodoFromDB(req.body.id))
+  .then((todo : FullTodo) => updateTodoInDB(conn, todo, req))
+  .then(() => getTodoFromDB(conn, req.body.id))
   .then(todo => {
     const newTodo : Todo = {
       id: todo.id,
@@ -40,7 +43,10 @@ const updateTodoModel = (req : Request) : Promise<{status: number, message: stri
     };
     return newTodo;
   })
-  .then(todo => ({status: 201, message: 'todo updated', todo}));
+  .then(todo => ({status: 201, message: 'todo updated', todo}))
+  .finally(() => {
+    conn.end();
+  });
 };
 
 export default updateTodoModel;

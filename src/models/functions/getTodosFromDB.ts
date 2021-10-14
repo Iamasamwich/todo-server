@@ -7,8 +7,7 @@ interface Todo {
   dueDate: string;
 };
 
-const getTodosFromDB = (userId : string | undefined) : Promise<Todo[]> => {
-  const conn = new Conn();
+const getTodosFromDB = (conn: Conn, userId : string | undefined) : Promise<Todo[]> => {
 
   const m = "SELECT * FROM todo WHERE userId = ?;";
   const p = userId;
@@ -25,9 +24,6 @@ const getTodosFromDB = (userId : string | undefined) : Promise<Todo[]> => {
       };
     });
     return todos;
-  })
-  .finally(() => {
-    conn.end();
   });
 };
 

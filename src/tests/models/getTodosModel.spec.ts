@@ -1,6 +1,7 @@
 import { Request } from "express";
 import addTodoModel from "../../models/addTodoModel";
 import addUserModel from "../../models/addUserModel";
+import Conn from "../../models/db";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 import getUserDetails from "../../models/functions/getUserDetails";
 import getTodosModel from "../../models/getTodosModel";
@@ -20,6 +21,9 @@ describe('getTodosModel', ()  => {
   });
 
   test('it creates a test user', () => {
+
+    const conn = new Conn();
+
     const req = {
       session: {},
       body: {
@@ -30,10 +34,11 @@ describe('getTodosModel', ()  => {
     } as Request;
 
     return addUserModel(req)
-    .then(() => getUserDetails('getTodos test'))
+    .then(() => getUserDetails(conn, 'getTodos test'))
     .then(resp => {
       testUserId = resp.id;
     })
+    .finally(() => conn.end());
   });
 
   test('it 404s if there are no todos', () => {

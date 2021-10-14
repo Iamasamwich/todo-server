@@ -1,3 +1,4 @@
+import { Request } from "express";
 import Conn from "../db";
 import convertDateFormat from "./convertDateFormat";
 
@@ -12,9 +13,8 @@ interface Todo extends NewTodo {
   id: number;
 }
 
-const updateTodoInDB = (todo: Todo, newTodo: NewTodo) => {
+const updateTodoInDB = (conn : Conn, todo: Todo, req : Request) => {
 
-  const conn = new Conn()
   const m = `
     UPDATE todo
     SET ?
@@ -22,17 +22,14 @@ const updateTodoInDB = (todo: Todo, newTodo: NewTodo) => {
   `;
   const p = [
     {
-      done: newTodo.done,
-      todo: newTodo.todo,
-      dueDate: convertDateFormat(newTodo.dueDate)
+      done: req.body.done,
+      todo: req.body.todo,
+      dueDate: convertDateFormat(req.body.dueDate)
     },
     todo.id
   ];
 
-  return conn.send(m, p)
-  .finally(() => {
-    conn.end();
-  });
+  return conn.send(m, p);
 };
 
 export default updateTodoInDB;

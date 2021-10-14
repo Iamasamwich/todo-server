@@ -1,5 +1,6 @@
 import { Request } from "express";
 import addUserModel from "../../models/addUserModel";
+import Conn from "../../models/db";
 import addUserToDB from "../../models/functions/addUserToDB";
 import checkIfUserInDB from "../../models/functions/checkIfUserInDB";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
@@ -34,8 +35,10 @@ describe('/models/functions/addUserToDB', () => {
   });
 
   test('the user has actually been added', async () => {
-    const test = await checkIfUserInDB('test email');
+    const conn = new Conn();
+    const test = await checkIfUserInDB(conn, 'test email');
     expect(test).toBe(true);
+    conn.end();
   });
 
   test('the user is logged in after creating an account', () => {
@@ -73,11 +76,23 @@ describe('/models/functions/addUserToDB', () => {
   });
 
   test('getting db to throw an error', () => {
-    return addUserToDB({email: 'test email', name: 'test name', pword: 'test pword'})
+
+    const conn = new Conn();
+
+    const req = {
+      body: {
+        email: 'test email', 
+        name: 'test name', 
+        pword: 'test pword'
+      }
+    } as Request;
+
+    return addUserToDB(conn, req)
     .catch(err => {
       expect(err.status).toBe(500);
       expect(err.message).toBe('server error');
-    });
+    })
+    .finally(() => conn.end());
   });
 
   test('it deletes the test user', async () => {

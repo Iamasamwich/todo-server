@@ -2,6 +2,7 @@ import { Request } from "express";
 import addTodoModel from "../../models/addTodoModel";
 import addTodoStepModel from "../../models/addTodoStepModel";
 import addUserModel from "../../models/addUserModel";
+import Conn from "../../models/db";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 import getUserDetails from "../../models/functions/getUserDetails";
 import getTodosModel from "../../models/getTodosModel";
@@ -16,6 +17,8 @@ describe('addTodoStepModel', () => {
   } as Request;
 
   test('it adds a test user and todo', () => {
+
+    const conn = new Conn();
     req.body = {
       email: 'add todo step test',
       name: 'add todo step test',
@@ -23,7 +26,7 @@ describe('addTodoStepModel', () => {
     };
 
     return addUserModel(req)
-    .then(() => getUserDetails('add todo step test'))
+    .then(() => getUserDetails(conn, 'add todo step test'))
     .then(resp => {
       req.session.loggedIn = true;
       req.session.userId = resp.id;
@@ -38,6 +41,9 @@ describe('addTodoStepModel', () => {
     .then(() => getTodosModel(req))
     .then(resp => {
       testTodos = resp.todos;
+    })
+    .finally(() => {
+      conn.end();
     });
   });
 
@@ -99,6 +105,9 @@ describe('addTodoStepModel', () => {
   });
 
   test('add a second user', () => {
+
+    const conn = new Conn();
+
     const req2 = {
       session: {},
       body: {
@@ -109,7 +118,7 @@ describe('addTodoStepModel', () => {
     } as Request;
 
     return addUserModel(req2)
-    .then(() => getUserDetails('add test step user 2'))
+    .then(() => getUserDetails(conn, 'add test step user 2'))
     .then(resp => resp.id)
     .then(user2Id => {
       req2.session.userId = user2Id;
@@ -125,7 +134,8 @@ describe('addTodoStepModel', () => {
     .catch(err => {
       expect(err.status).toBe(401);
       expect(err.message).toBe('not authorised');
-    });
+    })
+    .finally(() => conn.end());
   });
 
   test('it lets you add a todo step', () => {

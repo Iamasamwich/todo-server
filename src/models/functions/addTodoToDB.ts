@@ -1,10 +1,8 @@
 import {Request} from 'express';
 import convertDateFormat from './convertDateFormat';
+import Conn from '../db';
 
-import Conn from "../db";
-
-const addTodoToDB = (req : Request) => {
-  const conn = new Conn();
+const addTodoToDB = (conn : Conn, req : Request) => {
 
   const m = "INSERT INTO todo SET ?";
   const p = {
@@ -14,10 +12,7 @@ const addTodoToDB = (req : Request) => {
     done: req.body.done
   };
 
-  return conn.send(m, p)
-  .finally(() => {
-    conn.end();
-  });
+  return conn.send(m, p);
 };
 
 export default addTodoToDB;

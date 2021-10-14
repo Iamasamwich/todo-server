@@ -1,4 +1,5 @@
 import {Request} from 'express';
+import Conn from '../../models/db';
 
 import addUserToDB from "../../models/functions/addUserToDB";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
@@ -7,7 +8,16 @@ import logInModel from "../../models/logInModel";
 describe('logIn.model', () => {
 
   test('create a test account', async () => {
-    return await addUserToDB({email: 'test email', name: 'test name', pword: 'test pword'});
+    const conn = new Conn();
+    const req = {
+      session: {},
+      body: {
+        email: 'test email', name: 'test name', pword: 'test pword'
+      }
+    } as Request;
+    
+    return await addUserToDB(conn, req)
+    .finally(() => conn.end());
   });
 
   test('it 406s with an invalid body', () => {

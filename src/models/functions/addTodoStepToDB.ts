@@ -1,6 +1,7 @@
 import { Request } from 'express';
+import Conn from '../db';
 
-const addTodoStepToDB = (conn : any, req : Request) : Promise<any> => {
+const addTodoStepToDB = (conn : Conn, req : Request) : Promise<any> => {
   const m = 'INSERT INTO todoStep SET ?;';
   const p = {
     todoId: req.body.todoId,

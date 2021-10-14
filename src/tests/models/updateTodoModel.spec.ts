@@ -1,6 +1,7 @@
 import { Request } from "express";
 import addTodoModel from "../../models/addTodoModel";
 import addUserModel from "../../models/addUserModel";
+import Conn from "../../models/db";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 import getTodosFromDB from "../../models/functions/getTodosFromDB";
 import getUserDetails from "../../models/functions/getUserDetails";
@@ -22,6 +23,9 @@ describe('updateTodoModel', () => {
   let testTodos2 : Todo[];
 
   test('it creates a test user with todos', () => {
+
+    const conn = new Conn();
+
     const req = {
       body: {
         email: 'update todo test',
@@ -32,7 +36,7 @@ describe('updateTodoModel', () => {
     } as Request;
 
     return addUserModel(req)
-    .then(() => getUserDetails('update todo test'))
+    .then(() => getUserDetails(conn, 'update todo test'))
     .then(resp => {
       testUserId = resp.id;
       req.body = {
@@ -48,13 +52,17 @@ describe('updateTodoModel', () => {
     .then(resp => {
       expect(resp.status).toBe(201);
     })
-    .then(() => getTodosFromDB(testUserId))
+    .then(() => getTodosFromDB(conn, testUserId))
     .then(resp => {
       testTodos = resp;
-    });
+    })
+    .finally(() => conn.end());
   });
 
   test('it creates a second user with todos', () => {
+
+    const conn = new Conn();
+
     const req = {
       body: {
         email: 'update todo test 2',
@@ -65,7 +73,7 @@ describe('updateTodoModel', () => {
     } as Request;
 
     return addUserModel(req)
-    .then(() => getUserDetails('update todo test 2'))
+    .then(() => getUserDetails(conn, 'update todo test 2'))
     .then(resp => {
       testUserId2 = resp.id;
       req.body = {
@@ -82,10 +90,11 @@ describe('updateTodoModel', () => {
     .then(resp => {
       expect(resp.status).toBe(201);
     })
-    .then(() => getTodosFromDB(testUserId2))
+    .then(() => getTodosFromDB(conn, testUserId2))
     .then(resp => {
       testTodos2 = resp;
-    });
+    })
+    .finally(() => conn.end());
   });
 
   test('it 401s with no session', () => {

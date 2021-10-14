@@ -19,8 +19,7 @@ interface TodoWithSteps extends Todo {
 };
 
 
-const getTodoSteps = (todo : Todo) : Promise<TodoWithSteps> => {
-  const conn = new Conn();
+const getTodoSteps = (conn : Conn, todo : Todo) : Promise<TodoWithSteps> => {
 
   const m = 'SELECT * FROM todoStep WHERE todoId = ?;';
   const p = todo.id;
@@ -37,9 +36,6 @@ const getTodoSteps = (todo : Todo) : Promise<TodoWithSteps> => {
     });
 
     return {...todo, steps};
-  })
-  .finally(() => {
-    conn.end();
   });
 };
 
