@@ -1,19 +1,17 @@
 import { Request } from "express";
 import addTodoModel from "../../models/addTodoModel";
-import Conn from "../../models/db";
-import addUserToDB from "../../models/functions/addUserToDB";
+import addUserModel from "../../models/addUserModel";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
-import getUserDetails from "../../models/functions/getUserDetails";
 
 describe('addTodoModel', () => {
 
-  let testUserId : string;
+  const req = {
+    body: {
+    },
+    session: {}
+  } as Request;
 
   test('it 401s without a session', () => {
-    const req = {
-      body: {},
-    } as Request
-
     return addTodoModel(req)
     .catch(err => {
       expect(err.status).toBe(401);
@@ -22,7 +20,7 @@ describe('addTodoModel', () => {
   });
 
   test('it 401s without a userId in session', () => {
-    const req = {body: {}, session: {loggedIn: true}} as Request;
+    req.session.loggedIn = true;
 
     return addTodoModel(req)
     .catch(err => {
@@ -32,7 +30,8 @@ describe('addTodoModel', () => {
   });
 
   test('it 401s without loggedIn true in session', () => {
-    const req = {body: {}, session: {userId: 'test id'}} as Request;
+    req.session.userId = 'test id';
+    delete req.session.loggedIn;
 
     return addTodoModel(req)
     .catch(err => {
@@ -42,7 +41,7 @@ describe('addTodoModel', () => {
   });
 
   test('it 404s if the user doesnt exist', () => {
-    const req = {body: {}, session: {userId: 'test id', loggedIn: true}} as Request;
+    req.session.loggedIn = true;
 
     return addTodoModel(req)
     .catch(err => {
@@ -53,27 +52,20 @@ describe('addTodoModel', () => {
 
   test('add user for testing', async () => {
 
-    const conn = new Conn();
+    delete req.session.loggedIn;
+    delete req.session.userId;
 
-    const req = {
-      session: {},
-      body: {
-        email: 'add user test email', 
-        name: 'test name', 
-        pword: 'test pword'
-      }
-    } as Request;
+    req.body = {
+      email: 'add user test email', 
+      name: 'test name', 
+      pword: 'test pword'
+    };
 
-    return await addUserToDB(conn, req)
-    .then(() => getUserDetails(conn, 'add user test email'))
-    .then(resp => {
-      testUserId = resp.id;
-    })
-    .finally(() => conn.end());
+    return await addUserModel(req);
   });
 
   test('it 406s without a body', () => {
-    const req = {session: {loggedIn: true, userId: testUserId}} as Request;
+    delete req.body;
     return addTodoModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
@@ -82,7 +74,7 @@ describe('addTodoModel', () => {
   });
 
   test('it 406s without a todo in body', () => {
-    const req = {body: {}, session: {loggedIn: true, userId: testUserId}} as Request;
+    req.body = {};
 
     return addTodoModel(req)
     .catch(err => {
@@ -92,7 +84,11 @@ describe('addTodoModel', () => {
   });
 
   test('it 406s if the todo isnt a string', () => {
-    const req = {body: {todo: 1, dueDate: 'string', done: false}, session: {loggedIn: true, userId: testUserId}} as Request;
+    req.body = {
+        todo: 1,
+        dueDate: '2021-10-11',
+        done: false
+    };
 
     return addTodoModel(req)
     .catch(err => {
@@ -102,35 +98,19 @@ describe('addTodoModel', () => {
   });
 
   test('it 406s if the date is the wrong format', () => {
-    const req = {
-      body: {
-        todo: 'test todo', 
-        dueDate: '21-10-11',
-        done: false
-      }, 
-      session: {
-        loggedIn: true, 
-        userId: testUserId
-      }
-    } as Request;
+    req.body.todo = 'test todo';
+    req.body.dueDate = 'wrong format';
 
     return addTodoModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid');
     });
   });
 
   test('it 406s if there isnt done in the body', () => {
-    const req = {
-      body: {
-        todo: 'test todo', 
-        dueDate: '2021-10-11'
-      }, 
-      session: {
-        loggedIn: true, 
-        userId: testUserId
-      }
-    } as Request;
+    req.body.dueDate = '2021-10-11';
+    delete req.body.done;
 
     return addTodoModel(req)
     .catch(err => {
@@ -140,17 +120,7 @@ describe('addTodoModel', () => {
   });
 
   test('it 406s if body.done is the wrong type', () => {
-    const req = {
-      body: {
-        todo: 'test todo', 
-        dueDate: '2021-10-11',
-        done: 'hello'
-      }, 
-      session: {
-        loggedIn: true, 
-        userId: testUserId
-      }
-    } as Request;
+    req.body.done = 'hello';
 
     return addTodoModel(req)
     .catch(err => {
@@ -160,22 +130,13 @@ describe('addTodoModel', () => {
   });
 
   test('it adds a todo', () => {
-    const req = {
-      body: {
-        todo: 'test todo', 
-        dueDate: '2021-10-11',
-        done: false
-      }, 
-      session: {
-        loggedIn: true, 
-        userId: testUserId
-      }
-    } as Request;
+    req.body.done = false;
 
     return addTodoModel(req)
     .then(resp => {
       expect(resp.status).toBe(201);
       expect(resp.message).toBe('todo added');
+      return;
     });
   });
 

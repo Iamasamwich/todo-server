@@ -5,6 +5,7 @@ import users from '../../controllers';
 import Conn from "../../models/db";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 import getUserDetails from "../../models/functions/getUserDetails";
+import getUserModel from "../../models/getUserModel";
 import routes from "../../routes";
 
 const app = express();
@@ -45,20 +46,13 @@ describe('POST /users', () => {
   });
 
   test('it creates a user', async () => {
-
-    const conn = new Conn();
-
     const test = await request(app)
     .post('/users')
     .send({email: 'POST /users email', name: 'POST /users name', pword: 'POST /users pword'})
 
-    const user = await getUserDetails(conn, 'POST /users email');
-    expect(user.email).toBeTruthy();
-    expect(user.name).toBeTruthy();
-    expect(user.id).not.toBe('POST /users email');
-    expect(user.pword).not.toBe('POST /users pword');
-
-    conn.end();
+    expect(test.status).toBe(201);
+    expect(test.body.status).toBe(201);
+    expect(test.body.message).toBe('user created');
   });
 
   test('it 409s if the user exists', async () => {

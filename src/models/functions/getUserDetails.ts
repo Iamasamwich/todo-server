@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import Conn from '../db';
 
 interface GetUserDetails {
@@ -7,10 +8,10 @@ interface GetUserDetails {
   pword: string;
 };
 
-const getUserDetails = async (conn : Conn, email: string): Promise<GetUserDetails> => {
+const getUserDetails = async (conn : Conn, req : Request): Promise<GetUserDetails> => {
 
-  const m = 'select * from user where email=?'
-  const p = email;
+  const m = 'select * from user where id = ?;';
+  const p = req.session.userId;
 
   return conn.send(m, p)
   .then(resp => {

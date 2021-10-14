@@ -1,18 +1,16 @@
 import { Request } from "express";
 import addTodoModel from "../../models/addTodoModel";
 import addUserModel from "../../models/addUserModel";
-import Conn from "../../models/db";
-import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
-import getUserDetails from "../../models/functions/getUserDetails";
 import getTodosModel from "../../models/getTodosModel";
+import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 
 describe('getTodosModel', ()  => {
 
   let testUserId : string;
 
-  test('it 401s if the user isnt logged in', () => {
-    const req = {} as Request;
+  const req = {body: {}, session: {}} as Request;
 
+  test('it 401s if the user isnt logged in', () => {
     return getTodosModel(req)
     .catch(err => {
       expect(err.status).toBe(401);
@@ -21,34 +19,15 @@ describe('getTodosModel', ()  => {
   });
 
   test('it creates a test user', () => {
-
-    const conn = new Conn();
-
-    const req = {
-      session: {},
-      body: {
-        name: 'getTodos test',
-        email: 'getTodos test',
-        pword: 'test'
-      }
-    } as Request;
-
-    return addUserModel(req)
-    .then(() => getUserDetails(conn, 'getTodos test'))
-    .then(resp => {
-      testUserId = resp.id;
-    })
-    .finally(() => conn.end());
+    req.body = {
+      name: 'getTodos test',
+      email: 'getTodos test',
+      pword: 'test'
+    }
+    return addUserModel(req);
   });
 
   test('it 404s if there are no todos', () => {
-    const req = {
-      session: {
-        loggedIn: true,
-        userId: testUserId
-      }
-    } as Request;
-
     return getTodosModel(req)
     .catch(err => {
       expect(err.status).toBe(404);
@@ -57,17 +36,11 @@ describe('getTodosModel', ()  => {
   });
 
   test('it creates some test todos for the user', () => {
-    const req = {
-      session: {
-        loggedIn: true,
-        userId: testUserId
-      },
-      body: {
-        todo: 'getTodos test 1',
-        dueDate: '2021-11-01',
-        done: false
-      }
-    } as Request;
+    req.body = {
+      todo: 'getTodos test 1',
+      dueDate: '2021-11-01',
+      done: false
+    };
 
     return addTodoModel(req)
     .then(() => {
@@ -81,12 +54,7 @@ describe('getTodosModel', ()  => {
   });
 
   test('it gets the todos', () => {
-    const req = {
-      session: {
-        loggedIn: true, 
-        userId: testUserId
-      }
-    } as Request;
+    delete req.body;
 
     return getTodosModel(req)
     .then(resp => {

@@ -1,31 +1,26 @@
 import {Request} from 'express';
-import Conn from '../../models/db';
-
-import addUserToDB from "../../models/functions/addUserToDB";
-import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
+import addUserModel from '../../models/addUserModel';
 import logInModel from "../../models/logInModel";
+import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 
-describe('logIn.model', () => {
+describe('logInModel', () => {
+
+  const req = {body: {}, session: {}} as Request;
 
   test('create a test account', async () => {
-    const conn = new Conn();
-    const req = {
-      session: {},
-      body: {
-        email: 'test email', name: 'test name', pword: 'test pword'
-      }
-    } as Request;
+    req.body = {
+      email: 'test email', name: 'test name', pword: 'test pword'
+    };
     
-    return await addUserToDB(conn, req)
-    .finally(() => conn.end());
+    return await addUserModel(req);
   });
 
   test('it 406s with an invalid body', () => {
-    const req = {
-      body: {},
-      session: {}
-    } as Request;
-
+    delete req.session.userId;
+    delete req.session.loggedIn;
+    req.body = {
+    };
+    
     return logInModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
@@ -34,13 +29,10 @@ describe('logIn.model', () => {
   });
 
   test('it 404s with an non-existant email', () => {
-    const req = {
-      body: {
-        email: 'incorrect email',
-        pword: 'pword'
-      },
-      session: {}
-    } as Request;
+    req.body = {
+      email: 'incorrect email',
+      pword: 'pword'
+    };
 
     return logInModel(req)
     .catch(err => {
@@ -50,13 +42,10 @@ describe('logIn.model', () => {
   });
 
   test('it 401s with an incorrect password', () => {
-    const req = {
-      body: {
-        email: 'test email',
-        pword: 'incorrect pword'
-      },
-      session: {}
-    } as Request;
+    req.body = {
+      email: 'test email',
+      pword: 'incorrect pword'
+    };
 
     return logInModel(req)
     .catch(err => {
@@ -66,13 +55,10 @@ describe('logIn.model', () => {
   });
 
   test('lets you log in', () => {
-    const req = {
-      body: {
-        email: 'test email',
-        pword: 'test pword'
-      },
-      session: {}
-    } as Request;
+    req.body = {
+      email: 'test email',
+      pword: 'test pword'
+    };
 
     return logInModel(req)
     .then(resp => {

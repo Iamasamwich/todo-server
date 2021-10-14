@@ -1,15 +1,17 @@
 import { Request } from "express";
 import addUserModel from "../../models/addUserModel";
+import getUserModel from "../../models/getUserModel";
 import Conn from "../../models/db";
 import addUserToDB from "../../models/functions/addUserToDB";
-import checkIfUserInDB from "../../models/functions/checkIfUserInDB";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 
 describe('/models/functions/addUserToDB', () => {
 
-  test('it will 406 without a valid body', () => {
-    const req = {session: {}} as Request;
+  const req = {
+    session: {}
+  } as Request;
 
+  test('it will 406 without a valid body', () => {
     return addUserModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
@@ -18,14 +20,11 @@ describe('/models/functions/addUserToDB', () => {
   });
 
   test('it adds a user to the db', () => {
-    const req = {
-      body: {
-        email: 'test email',
-        name: 'test name',
-        pword: 'test pword'
-      },
-      session: {}
-    } as Request;
+    req.body =  {
+      email: 'test email',
+      name: 'test name',
+      pword: 'test pword'
+    };
 
     return addUserModel(req)
     .then(resp => {
@@ -34,40 +33,21 @@ describe('/models/functions/addUserToDB', () => {
     });
   });
 
-  test('the user has actually been added', async () => {
-    const conn = new Conn();
-    const test = await checkIfUserInDB(conn, 'test email');
-    expect(test).toBe(true);
-    conn.end();
-  });
-
-  test('the user is logged in after creating an account', () => {
-    const req = {
-      body: {
-        email: 'test email 2',
-        name: 'test name 2',
-        pword: 'test pword 2'
-      },
-      session: {}
-    } as Request;
-
-    return addUserModel(req)
+  test('the user has been added and logged in', () => {
+    return getUserModel(req)
     .then(resp => {
-      expect(req.session.userId).toBeTruthy();
       expect(req.session.loggedIn).toBe(true);
+      expect(req.session.userId).toBeTruthy();
+      expect(resp.status).toBe(200);
+      expect(resp.message).toBe('user fetched');
+      expect(resp.user.email).toBe('test email');
+      expect(resp.user.name).toBe('test name');
+      expect(resp.user.id).toBe(req.session.userId);
+      expect(resp.user.pword).toBeTruthy();
     });
   });
 
   test('it wont add the same user twice', () => {
-    const req = {
-      body: {
-        email: 'test email',
-        name: 'test name',
-        pword: 'test pword'
-      },
-      session: {}
-    } as Request;
-
     return addUserModel(req)
     .catch(err => {
       expect(err.status).toBe(409);
@@ -96,15 +76,6 @@ describe('/models/functions/addUserToDB', () => {
   });
 
   test('it deletes the test user', async () => {
-    return deleteUserFromDB('test email')
-    .then(res => {
-      expect(res.status).toBe(202);
-      expect(res.message).toBe('user deleted');
-    })
-  });
-
-  test('it deletes the other tests', async () => {
-    await deleteUserFromDB('test email 2');
-    return;
+    return await deleteUserFromDB('test email');
   });
 });

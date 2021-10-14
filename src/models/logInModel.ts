@@ -1,9 +1,9 @@
 import { Request } from "express";
 import Conn from "./db";
-import getUserDetails from "./functions/getUserDetails";
 import compareHash from "./functions/compareHash";
 import logUserIn from "./functions/logUserIn";
 import validateLoginUserReq from "./functions/validateLoginUserReq";
+import getUserDetailsByEmail from "./functions/getUserByEmail";
 
 const logInModel = (req : Request) => {
 
@@ -12,23 +12,21 @@ const logInModel = (req : Request) => {
   let userId : string;
 
   return validateLoginUserReq(req)
-  .then(() => getUserDetails(conn, req.body.email))
-  .then(resp => {
-    userId = resp.id;
-    return resp;
+  .then(() => getUserDetailsByEmail(conn, req))
+  .then(user => {
+    userId = user.id;
+    return compareHash(user.pword, req.body.pword)
   })
-  .then(user => compareHash(user.pword, req.body.pword))
   .then(resp => {
     if (!resp) {
       throw ({status: 401, message: 'not authorised'});
     };
-    return;
+    return logUserIn(req, userId);
   })
-  .then(() => logUserIn(req, userId))
   .then(() => ({status: 200, message: 'logged in'}))
   .finally(() => {
     conn.end();
-  })
+  });
 };
 
 export default logInModel;
