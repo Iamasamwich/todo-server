@@ -2,6 +2,7 @@ import { Request } from "express";
 import addTodoModel from "../../models/addTodoModel";
 import addUserModel from "../../models/addUserModel";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
+import getTodosModel from "../../models/getTodosModel";
 
 describe('addTodoModel', () => {
 
@@ -136,9 +137,40 @@ describe('addTodoModel', () => {
     .then(resp => {
       expect(resp.status).toBe(201);
       expect(resp.message).toBe('todo added');
-      return;
+      return getTodosModel(req);
+    })
+    .then(resp => {
+      expect(resp.todos[0]).toStrictEqual({
+        id: resp.todos[0].id,
+        done: 0,
+        dueDate: '2021-10-11',
+        todo: 'test todo',
+        steps: []
+      });
     });
   });
+
+  test('it strips the non a-zA-Z0-9 ., characters out and extra spaces', () => {
+    req.body = {
+      todo: '   test todo 2 @#$%^&,. ',
+      dueDate: '2021-11-11',
+      done: false
+    };
+
+    return addTodoModel(req)
+    .then(() => getTodosModel(req))
+    .then(resp => {
+      expect(resp.todos[1]).toStrictEqual({
+        id: resp.todos[1].id,
+        todo: 'test todo 2 ,.',
+        dueDate: '2021-11-11',
+        done: 0,
+        steps: []
+      });
+    });
+  })
+
+  
 
   test('clean up test user', async () => {
     return await deleteUserFromDB('add user test email');
