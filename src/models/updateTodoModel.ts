@@ -1,10 +1,10 @@
 import { Request } from "express";
 import Conn from "./db";
-import checkIfUserIdExists from "./functions/checkIfUserIdExists";
 import checkUserIsLoggedIn from "./functions/checkUserIsLoggedIn";
 import updateTodoInDB from "./functions/updateTodoInDB";
 import getTodoFromDB from "./functions/getTodoFromDB";
 import validateNewTodoReq from "./functions/validateNewTodoReq";
+import getUserDetails from "./functions/getUserDetails";
 
 interface Todo {
   id: number;
@@ -25,7 +25,7 @@ const updateTodoModel = (req : Request) : Promise<{status: number, message: stri
     if (!resp) throw ({status: 401, message: 'not authorised'})
     return;
   })
-  .then(() => checkIfUserIdExists(conn, req.session.userId))
+  .then(() => getUserDetails(conn, req))
   .then(() => validateNewTodoReq(req))
   .then(() => getTodoFromDB(conn, req.body.id))
   .then(todo => {
