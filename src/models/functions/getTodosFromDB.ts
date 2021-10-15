@@ -14,8 +14,7 @@ const getTodosFromDB = (conn: Conn, userId : string | undefined) : Promise<Todo[
 
   return conn.send(m, p)
   .then(resp => {
-    if (resp.length === 0) throw ({status: 404, message: 'todos not found'});
-    const todos = resp.map((todo : Todo) => {
+    return resp.map((todo : Todo) => {
       return {
         id: todo.id,
         done: todo.done,
@@ -23,7 +22,6 @@ const getTodosFromDB = (conn: Conn, userId : string | undefined) : Promise<Todo[
         todo: todo.todo
       };
     });
-    return todos;
   });
 };
 

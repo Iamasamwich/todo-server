@@ -19,6 +19,14 @@ describe('addTodoStepModel', () => {
     body: {}
   } as Request;
 
+  test('it 401s if there is no session', () => {
+    addTodoStepModel(req)
+    .catch(err => {
+      expect(err.status).toBe(401);
+      expect(err.message).toBe('not authorised');
+    });
+  });
+
   test('it adds a test user and todo', () => {
     req.body = {
       email: 'add todo step test',

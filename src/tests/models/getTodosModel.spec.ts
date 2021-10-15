@@ -27,11 +27,12 @@ describe('getTodosModel', ()  => {
     return addUserModel(req);
   });
 
-  test('it 404s if there are no todos', () => {
+  test('it returns an empty array if there are no todos', () => {
     return getTodosModel(req)
-    .catch(err => {
-      expect(err.status).toBe(404);
-      expect(err.message).toBe('todos not found');
+    .then(resp => {
+      expect(resp.status).toBe(200);
+      expect(resp.message).toBe('todos fetched');
+      expect(resp.todos).toStrictEqual([]);
     });
   });
 
