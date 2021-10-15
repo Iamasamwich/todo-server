@@ -1,6 +1,7 @@
 import { Request } from "express";
 import Conn from "../db";
 import convertDateFormat from "./convertDateFormat";
+import sanitiseString from "./sanitiseString";
 
 interface NewTodo {
   done: boolean;
@@ -23,7 +24,7 @@ const updateTodoInDB = (conn : Conn, todo: Todo, req : Request) => {
   const p = [
     {
       done: req.body.done,
-      todo: req.body.todo,
+      todo: sanitiseString(req.body.todo),
       dueDate: convertDateFormat(req.body.dueDate)
     },
     todo.id

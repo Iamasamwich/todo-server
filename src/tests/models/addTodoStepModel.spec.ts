@@ -164,6 +164,21 @@ describe('addTodoStepModel', () => {
     });
   });
 
+  test('it strips the non a-9 characters and spaces', () => {
+    req.body = {
+      step: '    add test ><>$step 3 #$$',
+      done: false,
+      todoId: testTodos[0].id
+    };
+
+    return addTodoStepModel(req)
+    .then(() => getTodosModel(req))
+    .then(resp => {
+      expect(resp.todos[0].steps.length).toBe(3);
+      expect(resp.todos[0].steps[2].step).toBe('add test step 3');
+    });
+  });
+
   test('clean up test', async () => {
     await deleteUserFromDB('add todo step test');
     await deleteUserFromDB('add test step user 2');

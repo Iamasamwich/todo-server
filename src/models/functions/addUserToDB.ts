@@ -1,6 +1,7 @@
 import makeHash from './makeHash';
 import Conn from '../db';
 import { Request } from 'express';
+import sanitiseString from './sanitiseString';
 
 const addUserToDB = async (conn : Conn, req : Request) : Promise<string> => {
 
@@ -11,7 +12,7 @@ const addUserToDB = async (conn : Conn, req : Request) : Promise<string> => {
   const p = {
     id: hashEmail,
     email: req.body.email,
-    name: req.body.name,
+    name: sanitiseString(req.body.name),
     pword: hashPword
   };
 

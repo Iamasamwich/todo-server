@@ -149,6 +149,19 @@ describe('updateTodoModel', () => {
     });
   });
 
+  test('it sanitises the todo', () => {
+    req.body = {
+      id: testTodos[0].id,
+      todo: '     test updated todo 123<>?,.   /)(*&^  ',
+      done: false,
+      dueDate: '2021-11-01'
+    };
+    return updateTodoModel(req)
+    .then(resp => {
+      expect(resp.todo.todo).toBe('test updated todo 123,.');
+    });
+  });
+
   test('clean up test', async () => {
     await deleteUserFromDB('update todo test');
     await deleteUserFromDB('update todo test 2');
