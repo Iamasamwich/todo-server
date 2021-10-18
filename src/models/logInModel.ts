@@ -12,7 +12,7 @@ const logInModel = (req : Request) => {
   let userId : string;
 
   return validateLoginUserReq(req)
-  .then(() => getUserDetailsByEmail(conn, req))
+  .then(() => getUserDetailsByEmail(conn, req.body.email))
   .then(user => {
     userId = user.id;
     return compareHash(user.pword, req.body.pword)

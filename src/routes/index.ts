@@ -1,20 +1,21 @@
-import {Router} from 'express';
+import {Request, Response, Router} from 'express';
 import controllers from '../controllers';
 
 const routes = Router();
 
-routes.post('/users', controllers.users.addUser);
+routes.post('/user', controllers.users.addUser);
 routes.post('/login', controllers.users.logInUser);
 routes.put('/login', controllers.users.logOutUser);
 
+routes.get('/todo', controllers.todos.getTodos);
+routes.post('/todo', controllers.todos.addTodo);
+routes.put('/todo/:todoId', controllers.todos.updateTodo);
 
-//get todos GET /todos
+routes.post('/todo/:todoId/step', controllers.todoSteps.addStep);
+routes.put('/todo/:todoId/step/:stepId', controllers.todoSteps.updateStep);
 
-//add todo POST /todos
-//get todo GET /todo/:id
-//update todo PUT /todos/:id
-//add todo step POST /todos/:id/step
-//update todo step PUT /todos/:todoId/step/:todoStepId
-
+routes.all('*', (req: Request, res: Response) => {
+  res.status(404).json({status: 404, message: '404'});
+});
 
 export default routes;

@@ -47,7 +47,7 @@ const updateTodoModel = (req : Request) : Promise<{status: number, message: stri
     };
     return newTodo;
   })
-  .then(todo => ({status: 201, message: 'todo updated', todo}))
+  .then(todo => ({status: 202, message: 'todo updated', todo}))
   .finally(() => {
     conn.end();
   });

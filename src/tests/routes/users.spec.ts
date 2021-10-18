@@ -31,19 +31,9 @@ app.use(routes);
 
 describe('POST /users', () => {
 
-  test('it 406s with incomplete body', async () => {
-    const test = await request(app)
-    .post('/users')
-    .send({});
-
-    expect(test.status).toBe(406);
-    expect(test.body.status).toBe(406);
-    expect(test.body.message).toBe('invalid');
-  });
-
   test('it creates a user', async () => {
     const test = await request(app)
-    .post('/users')
+    .post('/user')
     .send({email: 'POST /users email', name: 'POST /users name', pword: 'POST /users pword'})
 
     expect(test.status).toBe(201);
@@ -53,7 +43,7 @@ describe('POST /users', () => {
 
   test('it 409s if the user exists', async () => {
     const test = await request(app)
-    .post('/users')
+    .post('/user')
     .send({email: 'POST /users email', name: 'POST /users name', pword: 'POST /users pword'})
 
     expect(test.status).toBe(409);
@@ -69,34 +59,24 @@ describe('POST /users', () => {
 describe('logInUserController', () => {
   test('it creates an account for tests', async () => {
     return await request(app)
-    .post('/users')
-    .send({email: 'POST /users test2', name: 'POST /users test2', pword: 'POST /users test2'});
+    .post('/user')
+    .send({email: 'POST /login test', name: 'POST /login test', pword: 'POST /login test'});
   });
 
   test('it lets you log in', async () => {
     const test = await request(app)
     .post('/login')
-    .send({email: 'POST /users test2', pword: 'POST /users test2'})
+    .send({email: 'POST /login test', pword: 'POST /login test'})
 
     expect(test.status).toBe(200);
     expect(test.body.status).toBe(200);
     expect(test.body.message).toBe('logged in');
   });
 
-  test('it 406s with incomplete body', async () => {
-    const test = await request(app)
-    .post('/login')
-    .send({});
-
-    expect(test.status).toBe(406);
-    expect(test.body.status).toBe(406);
-    expect(test.body.message).toBe('invalid');
-  });
-
   test('it 401s with incorrect credentials', async () => {
     const test = await request(app)
     .post('/login')
-    .send({email: 'POST /users test2', pword: 'incorrect'});
+    .send({email: 'POST /login test', pword: 'incorrect'});
 
     expect(test.status).toBe(401);
     expect(test.body.status).toBe(401);
@@ -114,7 +94,7 @@ describe('logInUserController', () => {
   });
 
   test('clean up test', async () => {
-    return await deleteUserFromDB('POST /users test2');
+    return await deleteUserFromDB('POST /login test');
   });
 });
 

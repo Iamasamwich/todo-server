@@ -8,10 +8,10 @@ interface UserDetails {
   pword: string;
 };
 
-const getUserDetailsByEmail = (conn : Conn, req : Request) : Promise<UserDetails> => {
+const getUserDetailsByEmail = (conn : Conn, email : string) : Promise<UserDetails> => {
 
   const m = 'SELECT * FROM user WHERE email = ?;';
-  const p = req.body.email;
+  const p = email;
 
   return conn.send(m, p)
   .then(resp => {

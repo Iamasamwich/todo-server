@@ -157,7 +157,7 @@ describe('updateTodoModel', () => {
 
     return updateTodoModel(req)
     .then(resp => {
-      expect(resp.status).toBe(201);
+      expect(resp.status).toBe(202);
       expect(resp.message).toBe('todo updated');
       expect(resp.todo).toBeTruthy();
       expect(resp.todo.todo).toBe('test user 1 todo 1 updated');
