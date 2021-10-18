@@ -20,7 +20,7 @@ const addTodoStepModel = (req: Request) => {
     return;
   })
   .then(() => validateNewTodoStepReq(req))
-  .then(() => getTodoFromDB(conn, req.body.todoId))
+  .then(() => getTodoFromDB(conn, req))
   .then(todo => {
     if (todo.userId !== req.session.userId) throw ({status: 401, message: 'not authorised'});
     return;

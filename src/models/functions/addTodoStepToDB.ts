@@ -5,7 +5,7 @@ import sanitiseString from './sanitiseString';
 const addTodoStepToDB = (conn : Conn, req : Request) : Promise<any> => {
   const m = 'INSERT INTO todoStep SET ?;';
   const p = {
-    todoId: req.body.todoId,
+    todoId: Number(req.params.todoId),
     step: sanitiseString(req.body.step),
     done: req.body.done
   };

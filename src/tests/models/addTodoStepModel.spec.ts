@@ -11,12 +11,14 @@ describe('addTodoStepModel', () => {
 
   let req = {
     session: {},
-    body: {}
+    body: {},
+    params: {}
   } as Request;
 
   let req2 = {
     session: {},
-    body: {}
+    body: {},
+    params: {}
   } as Request;
 
   test('it 401s if there is no session', () => {
@@ -49,7 +51,17 @@ describe('addTodoStepModel', () => {
     });
   });
 
+  test ('it 406s with no todoId in params', () => {
+    req.body = {};
+    return addTodoStepModel(req) 
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid');
+    });
+  });
+
   test('it 406s with no body', () => {
+    req.params.userId = testTodos[0].id;
     delete req.body;
     return addTodoStepModel(req)
     .catch(err => {
@@ -58,19 +70,9 @@ describe('addTodoStepModel', () => {
     });
   });
 
-  test('it 406s with the no todoId', () => {
-    req.body = {}
-    return addTodoStepModel(req)
-    .catch(err => {
-      expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
-    });
-  });
-
   test('it 406s with the wrong todoId type', () => {
-    req.body = {
-      todoId: 'hello'
-    };
+    req.params.todoId = 'hello';
+    req.body = {};
     return addTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
@@ -79,7 +81,7 @@ describe('addTodoStepModel', () => {
   });
 
   test('it 406s with no step', () => {
-    req.body.todoId = testTodos[0].id;
+    req.params.todoId = testTodos[0].id;
     return addTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
@@ -114,8 +116,8 @@ describe('addTodoStepModel', () => {
 
     return addUserModel(req2)
     .then(() => {
+      req2.params.todoId = testTodos[0].id;
       req2.body = {
-        todoId: testTodos[0].id,
         step: 'this should fail',
         done: false
       };
@@ -147,7 +149,6 @@ describe('addTodoStepModel', () => {
     req.body = {
       step: 'add test step 2',
       done: true,
-      todoId: testTodos[0].id
     };
 
     return addTodoStepModel(req)
@@ -168,7 +169,6 @@ describe('addTodoStepModel', () => {
     req.body = {
       step: '    add test ><>$step 3 #$$',
       done: false,
-      todoId: testTodos[0].id
     };
 
     return addTodoStepModel(req)

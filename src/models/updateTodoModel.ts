@@ -25,15 +25,19 @@ const updateTodoModel = (req : Request) : Promise<{status: number, message: stri
     if (!resp) throw ({status: 401, message: 'not authorised'})
     return;
   })
+  .then(() => {
+    if (!req.params || !req.params.todoId || isNaN(Number(req.params.todoId))) throw ({status: 406, message: 'invalid'});
+    return;
+  })
   .then(() => getUserDetails(conn, req))
   .then(() => validateNewTodoReq(req))
-  .then(() => getTodoFromDB(conn, req.body.id))
+  .then(() => getTodoFromDB(conn, req))
   .then(todo => {
     if (todo.userId !== req.session.userId) throw ({status: 401, message: 'not authorised'});
     return todo;
   })
   .then((todo : FullTodo) => updateTodoInDB(conn, todo, req))
-  .then(() => getTodoFromDB(conn, req.body.id))
+  .then(() => getTodoFromDB(conn, req))
   .then(todo => {
     const newTodo : Todo = {
       id: todo.id,

@@ -1,3 +1,4 @@
+import { Request } from "express";
 import Conn from "../db";
 
 interface Todo {
@@ -8,10 +9,10 @@ interface Todo {
   dueDate: string;
 };
 
-const getTodoFromDB = (conn: Conn, id: number) : Promise<Todo> => {
+const getTodoFromDB = (conn: Conn, req: Request) : Promise<Todo> => {
 
   const m = "SELECT * FROM todo WHERE id = ?;";
-  const p = id;
+  const p : number = Number(req.params.todoId);
 
   return conn.send(m, p)
   .then(resp => {

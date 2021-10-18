@@ -17,20 +17,19 @@ describe('updateTodoModel', () => {
     dueDate: string;
   }
 
-  let testUserId : string;
   let testTodos : Todo[];
-
-  let testUserId2 : string;
   let testTodos2 : Todo[];
 
   const req = {
     session: {},
-    body: {}
+    body: {},
+    params: {}
   } as Request;
 
   const req2 = {
     session: {},
-    body: {}
+    body: {},
+    params: {}
   } as Request;
 
   const req3 = {} as Request;
@@ -55,6 +54,7 @@ describe('updateTodoModel', () => {
     .then(() => getTodosModel(req))
     .then(resp => {
       testTodos = resp.todos;
+      return;
     });
   });
 
@@ -89,7 +89,25 @@ describe('updateTodoModel', () => {
     });
   });
 
+  test('it 406s with no todoId in params', () => {
+    return updateTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid');
+    });
+  });
+
+  test('it 406s without a number as the todoId in params', () => {
+    req.params.todoId = 'hello';
+    return updateTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid');
+    });
+  });
+
   test('it 406s with no body', () => {
+    req.params.todoId = String(testTodos[0].id);
     delete req.body;
 
     return updateTodoModel(req)
@@ -100,8 +118,8 @@ describe('updateTodoModel', () => {
   });
 
   test('it 404s if the todo doesnt exist', () => {
+    req.params.todoId = '1';
     req.body = {
-      id: 1,
       todo: 'test todo update', 
       done: false,
       dueDate: '2021-10-21'
@@ -115,8 +133,8 @@ describe('updateTodoModel', () => {
   });
 
   test('it 401s if the todo doesnt belong to the user', () => {
+    req.params.todoId = String(testTodos2[0].id);
     req.body = {
-      id: testTodos2[0].id,
       todo: 'test update should fail',
       dueDate: '2022-11-11',
       done: false
@@ -130,8 +148,8 @@ describe('updateTodoModel', () => {
   });
 
   test('it updates a todo', () => {
+    req.params.todoId = String(testTodos[0].id);
     req.body = {
-      id: testTodos[0].id,
       todo: 'test user 1 todo 1 updated',
       done: true,
       dueDate: '3000-01-1'
@@ -151,7 +169,6 @@ describe('updateTodoModel', () => {
 
   test('it sanitises the todo', () => {
     req.body = {
-      id: testTodos[0].id,
       todo: '     test updated todo 123<>?,.   /)(*&^  ',
       done: false,
       dueDate: '2021-11-01'
