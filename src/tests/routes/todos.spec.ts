@@ -1,3 +1,4 @@
+import { timeStamp } from "console";
 import express from "express";
 import session from "express-session";
 import request from 'supertest';
@@ -132,9 +133,38 @@ describe('POST /todo', () => {
     return;
   });
 
-  test('PUT /todo/id will 401 if the user isnt logged in', async () => {
+  test('GET /todo/id will get a single todo', async () => {
+    const test = await request(app)
+    .get('/todo/' + testTodos[0].id);
+
+    expect(test.status).toBe(200);
+    expect(test.body.status).toBe(200);
+    expect(test.body.message).toBe('todo fetched');
+    expect(test.body.todo).toStrictEqual({
+      id: testTodos[0].id,
+      todo: 'updated post todo test',
+      dueDate: '2022-12-01',
+      done: 1,
+      steps: []
+    });
+
+    return;
+  });
+
+  test('GET /todo/id will 401 if user isnt logged in', async () => {
     userId = '';
     loggedIn = false;
+
+    const test = await request(app)
+    .get('/todo/' + testTodos[0].id);
+
+    expect(test.status).toBe(401);
+    expect(test.body.status).toBe(401);
+    expect(test.body.message).toBe('not authorised');
+    return;
+  });
+
+  test('PUT /todo/id will 401 if the user isnt logged in', async () => {
 
     const test = await request(app)
     .put('/todo/' + String(testTodos[0].id))

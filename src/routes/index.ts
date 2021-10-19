@@ -8,6 +8,7 @@ routes.post('/login', controllers.users.logInUser);
 routes.put('/login', controllers.users.logOutUser);
 
 routes.get('/todo', controllers.todos.getTodos);
+routes.get('/todo/:todoId', controllers.todos.getTodo);
 routes.post('/todo', controllers.todos.addTodo);
 routes.put('/todo/:todoId', controllers.todos.updateTodo);
 
