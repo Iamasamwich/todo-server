@@ -1,7 +1,11 @@
-import {Request, Response, Router} from 'express';
+import {Router} from 'express';
 import controllers from '../controllers';
 
 const routes = Router();
+
+routes.get('/ping', (req, res) => {
+  res.status(200).json({status: 200, message: 'pong'});
+});
 
 routes.post('/user', controllers.users.addUser);
 routes.post('/login', controllers.users.logInUser);
@@ -15,7 +19,7 @@ routes.put('/todo/:todoId', controllers.todos.updateTodo);
 routes.post('/todo/:todoId/step', controllers.todoSteps.addStep);
 routes.put('/todo/:todoId/step/:stepId', controllers.todoSteps.updateStep);
 
-routes.all('*', (req: Request, res: Response) => {
+routes.all('*', (req, res) => {
   res.status(404).json({status: 404, message: '404'});
 });
 

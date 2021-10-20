@@ -1,5 +1,6 @@
 import express from 'express';
 import session from 'express-session';
+import cors from 'cors';
 import * as dotenv from 'dotenv';
 import routes from './routes';
 
@@ -27,9 +28,28 @@ app.use(session({
 }));
 
 app.use((req, res, next) => {
-  console.log(req.session.id);
+  console.log('source', req.ip);
+  console.log('method', req.method);
+  console.log('route', req.path);
+  console.log('session id', req.session.id);
   next();
 });
+
+const whiteListOrigins : Array<string | undefined> = [
+  'http://localhost:3001'
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (whiteListOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('unacceptable origin --->', origin);
+      callback(new Error('unacceptable origin: ' + origin));
+    };
+  },
+  credentials: true
+}));
 
 app.use(express.static('public'));
 
