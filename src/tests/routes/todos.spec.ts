@@ -1,4 +1,3 @@
-import { timeStamp } from "console";
 import express from "express";
 import session from "express-session";
 import request from 'supertest';

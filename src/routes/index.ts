@@ -3,9 +3,7 @@ import controllers from '../controllers';
 
 const routes = Router();
 
-routes.get('/ping', (req, res) => {
-  res.status(200).json({status: 200, message: 'pong'});
-});
+routes.get('/ping', controllers.users.ping)
 
 routes.post('/user', controllers.users.addUser);
 routes.post('/login', controllers.users.logInUser);
