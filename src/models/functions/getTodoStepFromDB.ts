@@ -1,9 +1,8 @@
-import { Request } from "express";
 import Conn from "../db";
 
-const getTodoStepFromDB = (conn : Conn, req : Request) : Promise<any> => {
+const getTodoStepFromDB = (conn : Conn, stepId: string) : Promise<any> => {
   const m = 'SELECT * FROM todoStep WHERE id = ?;';
-  const p = req.params.stepId;
+  const p = Number(stepId);
 
   return conn.send(m, p)
   .then(resp => {

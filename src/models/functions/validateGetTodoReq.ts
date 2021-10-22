@@ -1,7 +1,6 @@
 import { Request } from "express";
 
 const validateGetTodo = (req: Request) : Promise<void> => {
-
   if (
     !req.params.todoId ||
     isNaN(Number(req.params.todoId))

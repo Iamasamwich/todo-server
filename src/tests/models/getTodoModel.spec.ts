@@ -62,6 +62,7 @@ describe('getTodoModel', () => {
       expect(resp.status).toBe(200);
       expect(resp.message).toBe('todo fetched');
       expect(resp.todo.id).toBe(testTodos[0].id);
+      expect(resp.todo.userId).toBe(req.session.userId);
       expect(resp.todo.done).toBeFalsy();
       expect(resp.todo.todo).toBe('getTodoModel test todo');
       expect(resp.todo.dueDate).toBe('2021-11-01');

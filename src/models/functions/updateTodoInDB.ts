@@ -2,19 +2,9 @@ import { Request } from "express";
 import Conn from "../db";
 import convertDateFormat from "./convertDateFormat";
 import sanitiseString from "./sanitiseString";
+import { TodoWithUser } from '../../interfaces';
 
-interface NewTodo {
-  done: boolean;
-  todo: string;
-  dueDate: string;
-}
-
-interface Todo extends NewTodo {
-  userId: string;
-  id: number;
-}
-
-const updateTodoInDB = (conn : Conn, todo: Todo, req : Request) => {
+const updateTodoInDB = (conn : Conn, todo: TodoWithUser, req : Request) => {
 
   const m = `
     UPDATE todo

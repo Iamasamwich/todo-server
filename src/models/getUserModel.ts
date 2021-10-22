@@ -3,13 +3,6 @@ import Conn from "./db";
 import checkUserIsLoggedIn from "./functions/checkUserIsLoggedIn";
 import getUserDetails from "./functions/getUserDetails";
 
-interface UserDetails {
-  id: string;
-  name: string;
-  email: string;
-  pword: string;
-};
-
 const getUserModel = (req : Request) => {
   const conn = new Conn();
 
@@ -18,7 +11,7 @@ const getUserModel = (req : Request) => {
     if (!resp) throw ({status: 401, message: 'not authorised'});
     return;
   })
-  .then(() => getUserDetails(conn, req))
+  .then(() => getUserDetails(conn, req.session.userId))
   .then(resp => ({status: 200, message: 'user fetched', user: resp}))
   .finally(() => {
     conn.end();

@@ -5,12 +5,6 @@ import checkUserIsLoggedIn from "./functions/checkUserIsLoggedIn";
 import getTodoFromDB from "./functions/getTodoFromDB";
 import validateNewTodoStepReq from "./functions/validateNewTodoStepReq";
 
-interface TodoStep {
-  todoId: number;
-  step: string;
-  done: boolean;
-};
-
 const addTodoStepModel = (req: Request) => {
   const conn = new Conn();
 
@@ -20,7 +14,7 @@ const addTodoStepModel = (req: Request) => {
     return;
   })
   .then(() => validateNewTodoStepReq(req))
-  .then(() => getTodoFromDB(conn, req))
+  .then(() => getTodoFromDB(conn, req.params.todoId))
   .then(todo => {
     if (todo.userId !== req.session.userId) throw ({status: 401, message: 'not authorised'});
     return;

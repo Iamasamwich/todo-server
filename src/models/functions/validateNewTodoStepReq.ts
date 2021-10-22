@@ -1,7 +1,6 @@
 import { Request } from "express";
 
 const validateNewTodoStepReq = (req : Request) : Promise<void> => {
-
   if (
     !req.params ||
     !req.params.todoId ||

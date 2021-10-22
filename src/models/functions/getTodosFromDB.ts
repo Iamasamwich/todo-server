@@ -1,27 +1,21 @@
 import Conn from "../db";
+import getTodoSteps from "./getTodoSteps";
+import { TodoWithUser, Step } from '../../interfaces';
 
-interface Todo {
-  id: number;
-  todo: string;
-  done: boolean;
-  dueDate: string;
+interface TodoWithSteps extends TodoWithUser {
+  steps: Step[];
 };
 
-const getTodosFromDB = (conn: Conn, userId : string | undefined) : Promise<Todo[]> => {
+const getTodosFromDB = (conn: Conn, userId : string | undefined) : Promise<TodoWithSteps[]> => {
 
   const m = "SELECT * FROM todo WHERE userId = ?;";
   const p = userId;
 
   return conn.send(m, p)
-  .then(resp => {
-    return resp.map((todo : Todo) => {
-      return {
-        id: todo.id,
-        done: todo.done,
-        dueDate: todo.dueDate,
-        todo: todo.todo
-      };
-    });
+  .then((todos : TodoWithUser[]) => {
+    return Promise.all(todos.map(todo => {
+      return getTodoSteps(conn, todo);
+    }));
   });
 };
 

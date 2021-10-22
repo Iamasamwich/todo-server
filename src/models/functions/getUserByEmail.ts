@@ -1,12 +1,5 @@
-import { Request } from "express";
 import Conn from "../db";
-
-interface UserDetails {
-  id: string;
-  name: string;
-  email: string;
-  pword: string;
-};
+import { UserDetails } from '../../interfaces';
 
 const getUserDetailsByEmail = (conn : Conn, email : string) : Promise<UserDetails> => {
 

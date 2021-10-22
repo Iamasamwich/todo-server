@@ -64,6 +64,7 @@ describe('getTodosModel', ()  => {
         message: 'todos fetched',
         todos: [
           {
+            userId: req.session.userId,
             id: resp.todos[0].id,
             todo: 'getTodos test 1',
             dueDate: '2021-11-01',
@@ -71,6 +72,7 @@ describe('getTodosModel', ()  => {
             steps: []
           },
           {
+            userId: req.session.userId,
             id: resp.todos[1].id,
             todo: 'getTodos test 2',
             dueDate: '2021-11-02',

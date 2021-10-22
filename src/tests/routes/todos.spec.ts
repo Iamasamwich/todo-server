@@ -75,6 +75,12 @@ describe('POST /todo', () => {
     expect(test.status).toBe(201);
     expect(test.body.status).toBe(201);
     expect(test.body.message).toBe('todo added');
+    expect(test.body.todo.id).toBeTruthy();
+    expect(test.body.todo.userId).toBeFalsy();
+    expect(test.body.todo.todo).toBe('POST todo test');
+    expect(test.body.todo.dueDate).toBe('2021-12-01');
+    expect(test.body.todo.done).toBeFalsy();
+    expect(test.body.todo.steps).toStrictEqual([]);
     return;
   });
 
@@ -107,10 +113,12 @@ describe('POST /todo', () => {
     expect(test.body.todos[0].todo).toBe('POST todo test');
     expect(test.body.todos[0].done).toBeFalsy();
     expect(test.body.todos[0].dueDate).toBe('2021-12-01');
+    expect(test.body.todos[0].userId).toBeFalsy();
     expect(test.body.todos[0].steps).toStrictEqual([]);
     expect(test.body.todos[1].todo).toBe('POST todo test 2');
     expect(test.body.todos[1].done).toBeFalsy();
     expect(test.body.todos[1].dueDate).toBe('2022-01-11');
+    expect(test.body.todos[1].userId).toBeFalsy();
     expect(test.body.todos[1].steps).toStrictEqual([]);
 
     testTodos = test.body.todos;
@@ -126,9 +134,11 @@ describe('POST /todo', () => {
     expect(test.status).toBe(202);
     expect(test.body.status).toBe(202);
     expect(test.body.message).toBe('todo updated');
+    expect(test.body.todo.userId).toBeFalsy();
     expect(test.body.todo.todo).toBe('updated post todo test')
     expect(test.body.todo.done).toBeTruthy();
     expect(test.body.todo.dueDate).toBe('2022-12-01');
+    expect(test.body.todo.steps).toStrictEqual([]);
     return;
   });
 

@@ -1,5 +1,4 @@
 import {Request} from 'express';
-
 import addUserToDB from './functions/addUserToDB';
 import checkIfUserInDB from './functions/checkIfUserInDB';
 import validateNewUserReq from './functions/validateNewUserReq';

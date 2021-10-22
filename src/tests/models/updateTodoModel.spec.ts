@@ -160,10 +160,12 @@ describe('updateTodoModel', () => {
       expect(resp.status).toBe(202);
       expect(resp.message).toBe('todo updated');
       expect(resp.todo).toBeTruthy();
+      expect(resp.todo.userId).toBeTruthy();
       expect(resp.todo.todo).toBe('test user 1 todo 1 updated');
       expect(resp.todo.dueDate).toBe('3000-01-01');
       expect(resp.todo.done).toBeTruthy();
       expect(resp.todo.id).toBe(testTodos[0].id);
+      expect(resp.todo.steps).toStrictEqual([]);
     });
   });
 

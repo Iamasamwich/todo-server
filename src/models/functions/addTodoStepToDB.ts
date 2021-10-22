@@ -2,7 +2,7 @@ import { Request } from 'express';
 import Conn from '../db';
 import sanitiseString from './sanitiseString';
 
-const addTodoStepToDB = (conn : Conn, req : Request) : Promise<any> => {
+const addTodoStepToDB = (conn : Conn, req : Request) : Promise<void> => {
   const m = 'INSERT INTO todoStep SET ?;';
   const p = {
     todoId: Number(req.params.todoId),

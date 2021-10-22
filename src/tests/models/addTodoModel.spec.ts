@@ -137,16 +137,11 @@ describe('addTodoModel', () => {
     .then(resp => {
       expect(resp.status).toBe(201);
       expect(resp.message).toBe('todo added');
-      return getTodosModel(req);
-    })
-    .then(resp => {
-      expect(resp.todos[0]).toStrictEqual({
-        id: resp.todos[0].id,
-        done: 0,
-        dueDate: '2021-10-11',
-        todo: 'test todo',
-        steps: []
-      });
+      expect(resp.todo.todo).toBe('test todo');
+      expect(resp.todo.done).toBeFalsy();
+      expect(resp.todo.dueDate).toBe('2021-10-11');
+      expect(resp.todo.steps).toStrictEqual([]);
+      expect(resp.todo.id).toBeTruthy();
     });
   });
 
@@ -158,19 +153,14 @@ describe('addTodoModel', () => {
     };
 
     return addTodoModel(req)
-    .then(() => getTodosModel(req))
     .then(resp => {
-      expect(resp.todos[1]).toStrictEqual({
-        id: resp.todos[1].id,
-        todo: 'test todo 2 ,.',
-        dueDate: '2021-11-11',
-        done: 0,
-        steps: []
-      });
+      expect(resp.todo.id).toBeTruthy();
+      expect(resp.todo.todo).toBe('test todo 2 ,.');
+      expect(resp.todo.dueDate).toBe('2021-11-11');
+      expect(resp.todo.done).toBe(0);
+      expect(resp.todo.steps).toStrictEqual([]);
     });
-  })
-
-  
+  });
 
   test('clean up test user', async () => {
     return await deleteUserFromDB('add user test email');

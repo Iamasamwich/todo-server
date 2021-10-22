@@ -1,17 +1,10 @@
-import { Request } from 'express';
 import Conn from '../db';
+import { UserDetails } from '../../interfaces';
 
-interface GetUserDetails {
-  id: string;
-  email: string;
-  name: string;
-  pword: string;
-};
-
-const getUserDetails = async (conn : Conn, req : Request): Promise<GetUserDetails> => {
+const getUserDetails = async (conn : Conn, userId: string | undefined): Promise<UserDetails> => {
 
   const m = 'select * from user where id = ?;';
-  const p = req.session.userId;
+  const p = userId;
 
   return conn.send(m, p)
   .then(resp => {

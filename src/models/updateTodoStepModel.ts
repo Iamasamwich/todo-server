@@ -6,9 +6,6 @@ import getTodoStepFromDB from './functions/getTodoStepFromDB';
 import updateTodoStepInDB from './functions/updateTodoStepInDB';
 import validateNewTodoStepReq from './functions/validateNewTodoStepReq';
 
-//params: todoid, stepId
-
-
 const updateTodoStepModel = (req : Request) : Promise<{status: number, message: string}>=> {
 
   const conn = new Conn();
@@ -19,12 +16,12 @@ const updateTodoStepModel = (req : Request) : Promise<{status: number, message: 
     if (!req.params.stepId || isNaN(Number(req.params.stepId))) throw ({status: 406, message: 'invalid'});
     return;
   })
-  .then(() => getTodoFromDB(conn, req))
+  .then(() => getTodoFromDB(conn, req.params.todoId))
   .then(todo => {
     if (todo.userId !== req.session.userId) throw ({status: 401, message: 'not authorised'});
     return;
   })
-  .then(() => getTodoStepFromDB(conn, req))
+  .then(() => getTodoStepFromDB(conn, req.params.stepId))
   .then(() => updateTodoStepInDB(conn, req))
   .then(() => ({status: 202, message: 'todo step updated'}))
   .finally(() => {
