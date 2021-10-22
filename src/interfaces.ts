@@ -7,6 +7,7 @@ export interface Todo {
   id: number;
   todo: string;
   done: boolean;
+  dueDate: string;
 };
 
 export interface TodoWithUser extends Todo {

@@ -22,7 +22,7 @@ const addTodoModel = (req : Request) : Promise<AddTodoRes> => {
   return checkUserIsLoggedIn(req)
   .then(resp => {
     if (!resp) throw ({status: 401, message: 'not authorised'})
-    return getUserDetails(conn, req.session.userId);``
+    return getUserDetails(conn, req.session.userId);
   })
   .then(() => validateNewTodoReq(req))
   .then(() => addTodoToDB(conn, req))
