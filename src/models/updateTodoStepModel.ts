@@ -5,8 +5,9 @@ import getTodoFromDB from './functions/getTodoFromDB';
 import getTodoStepFromDB from './functions/getTodoStepFromDB';
 import updateTodoStepInDB from './functions/updateTodoStepInDB';
 import validateNewTodoStepReq from './functions/validateNewTodoStepReq';
+import { Step } from '../interfaces';
 
-const updateTodoStepModel = (req : Request) : Promise<{status: number, message: string}>=> {
+const updateTodoStepModel = (req : Request) : Promise<{status: number, message: string, step: Step}>=> {
 
   const conn = new Conn();
 
@@ -23,7 +24,8 @@ const updateTodoStepModel = (req : Request) : Promise<{status: number, message: 
   })
   .then(() => getTodoStepFromDB(conn, req.params.stepId))
   .then(() => updateTodoStepInDB(conn, req))
-  .then(() => ({status: 202, message: 'todo step updated'}))
+  .then(() => getTodoStepFromDB(conn, req.params.stepId))
+  .then(step => ({status: 202, message: 'todo step updated', step}))
   .finally(() => {
     conn.end();
   });

@@ -2,6 +2,7 @@ import { Request } from "express";
 import addTodoModel from "../../models/addTodoModel";
 import addTodoStepModel from "../../models/addTodoStepModel";
 import addUserModel from "../../models/addUserModel";
+import addTodoToDB from "../../models/functions/addTodoToDB";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 import getTodosModel from "../../models/getTodosModel";
 
@@ -176,6 +177,23 @@ describe('addTodoStepModel', () => {
     .then(resp => {
       expect(resp.todos[0].steps.length).toBe(3);
       expect(resp.todos[0].steps[2].step).toBe('add test step 3');
+    });
+  });
+
+  test('it returns the todo step', () => {
+    req.body = {
+      step: 'testing step return',
+      done: false
+    };
+
+    return addTodoStepModel(req)
+    .then(resp => {
+      expect(resp.status).toBe(201);
+      expect(resp.message).toBe('todo step added');
+      expect(resp.step.step).toBe('testing step return');
+      expect(resp.step.done).toBeFalsy();
+      expect(resp.step.id).toBeTruthy();
+      expect(resp.step.todoId).toBe(testTodos[0].id);
     });
   });
 

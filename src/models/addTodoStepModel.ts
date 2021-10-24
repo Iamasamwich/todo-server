@@ -3,6 +3,7 @@ import Conn from "./db";
 import addTodoStepToDB from "./functions/addTodoStepToDB";
 import checkUserIsLoggedIn from "./functions/checkUserIsLoggedIn";
 import getTodoFromDB from "./functions/getTodoFromDB";
+import getTodoStepFromDB from './functions/getTodoStepFromDB';
 import validateNewTodoStepReq from "./functions/validateNewTodoStepReq";
 
 const addTodoStepModel = (req: Request) => {
@@ -20,7 +21,8 @@ const addTodoStepModel = (req: Request) => {
     return;
   })
   .then(() => addTodoStepToDB(conn, req))
-  .then(() => ({status: 201, message: 'todo step added'}))
+  .then(stepId => getTodoStepFromDB(conn, String(stepId)))
+  .then(step => ({status: 201, message: 'todo step added', step}))
   .finally(() => {
     conn.end();
   });

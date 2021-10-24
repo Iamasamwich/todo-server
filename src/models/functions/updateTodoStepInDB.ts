@@ -12,7 +12,7 @@ const updateTodoStepInDB = (conn : Conn, req : Request) => {
     done: req.body.done
   }, Number(req.params.stepId)];
 
-  return conn.send(m, p);
+  return conn.send(m, p)
 };
 
 export default updateTodoStepInDB;

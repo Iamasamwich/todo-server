@@ -92,6 +92,11 @@ describe('todoStep routes', () => {
     expect(test.status).toBe(201);
     expect(test.body.status).toBe(201);
     expect(test.body.message).toBe('todo step added');
+    expect(test.body.step.step).toBe('todostep test step');
+    expect(test.body.step.done).toBeFalsy();
+    expect(test.body.step.todoId).toBe(testTodos[0].id);
+    expect(test.body.step.id).toBeTruthy();
+
     return;
   });
 
@@ -125,6 +130,10 @@ describe('todoStep routes', () => {
     expect(test.status).toBe(202);
     expect(test.body.status).toBe(202);
     expect(test.body.message).toBe('todo step updated');
+    expect(test.body.step.id).toBe(testTodos[0].steps[0].id);
+    expect(test.body.step.step).toBe('updated todo step');
+    expect(test.body.step.todoId).toBe(testTodos[0].id);
+    expect(test.body.step.done).toBeTruthy();
     return;
   });
 

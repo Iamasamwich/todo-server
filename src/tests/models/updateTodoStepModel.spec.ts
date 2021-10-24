@@ -152,6 +152,11 @@ describe('updateTodoStepModel', () => {
     .then(resp => {
       expect(resp.status).toBe(202);
       expect(resp.message).toBe('todo step updated');
+      expect(resp.step).toBeTruthy();
+      expect(resp.step.step).toBe('updated step test');
+      expect(resp.step.done).toBeTruthy();
+      expect(resp.step.todoId).toBe(testTodos[0].id);
+      expect(resp.step.id).toBe(testTodos[0].steps[0].id);
     })
     .then(() => getTodosModel(req))
     .then(resp => {
