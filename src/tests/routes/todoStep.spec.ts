@@ -110,23 +110,12 @@ describe('todoStep routes', () => {
     testTodos = test.body.todos;
     return;
   });
-
-  test('add step 406s without a valid body', async () => {
-    const test = await request(app)
-    .post('/todo/' + String(testTodos[0].id) + '/step')
-    .send({todo: 'this should not work'});
-
-    expect(test.status).toBe(406);
-    expect(test.body.status).toBe(406);
-    expect(test.body.message).toBe('invalid');
-    return;
-  });
-
+  
   test('you can update a step', async () => {
     const test = await request(app)
-    .put('/todo/' + String(testTodos[0].id + '/step/' + String(testTodos[0].steps[0].id)))
+    .put(`/todo/${String(testTodos[0].id)}/step/${String(testTodos[0].steps[0].id)}`)
     .send({step: 'updated todo step', done: true});
-
+    
     expect(test.status).toBe(202);
     expect(test.body.status).toBe(202);
     expect(test.body.message).toBe('todo step updated');
@@ -136,20 +125,51 @@ describe('todoStep routes', () => {
     expect(test.body.step.done).toBeTruthy();
     return;
   });
-
-  test('updateStep 401s without a valid user', async () => {
+  
+  test('DELETE /todo/id/step/id deletes a step', async () => {
+    const test = await request(app)
+    .delete(`/todo/${testTodos[0].id}/step/${testTodos[0].steps[0].id}`);
+    
+    expect(test.status).toBe(202);
+    expect(test.body.status).toBe(202);
+    expect(test.body.message).toBe('step deleted');
+    return;
+  });
+  
+  test('PUT /todo/id/step/id throws an error', async () => {
     loggedIn = false;
     userId = '';
-
+    
     const test = await request(app)
     .put('/todo/' + String(testTodos[0].id + '/step/' + String(testTodos[0].steps[0].id)))
     .send({step: 'this shouldnt work', done: true});
+    
+    expect(test.status).toBe(401);
+    expect(test.body.status).toBe(401);
+    expect(test.body.message).toBe('not authorised');
+    return;
+  });
+  
+  test('POST /todo/id/step throws an error', async () => {
+    const test = await request(app)
+    .post(`/todo/${String(testTodos[0].id)}/step`)
+    .send({step: 'this should not work'});
 
     expect(test.status).toBe(401);
     expect(test.body.status).toBe(401);
     expect(test.body.message).toBe('not authorised');
     return;
-  })
+  });
+
+  test('DELETE /todo/id/step/id throws an error', async () => {
+    const test = await request(app)
+    .delete(`/todo/${String(testTodos[0].id)}/step/${String(testTodos[0].steps[0].id)}`);
+    
+    expect(test.status).toBe(401);
+    expect(test.body.status).toBe(401);
+    expect(test.body.message).toBe('not authorised');
+    return;
+  });
 
   test('clean up tests', () => {
     return deleteUserFromDB('todostep test user');

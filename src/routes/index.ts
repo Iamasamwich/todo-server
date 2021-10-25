@@ -17,6 +17,7 @@ routes.delete('/todo/:todoId', controllers.todos.deleteTodo);
 
 routes.post('/todo/:todoId/step', controllers.todoSteps.addStep);
 routes.put('/todo/:todoId/step/:stepId', controllers.todoSteps.updateStep);
+routes.delete('/todo/:todoId/step/:stepId', controllers.todoSteps.deleteStep);
 
 routes.all('*', (req, res) => {
   res.status(404).json({status: 404, message: '404'});

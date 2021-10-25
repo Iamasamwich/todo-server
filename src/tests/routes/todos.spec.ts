@@ -176,6 +176,15 @@ describe('POST /todo', () => {
     return;
   });
 
+  test('DELETE /todo/id will catch an error', async () => {
+    const test = await request(app)
+    .delete(`/todo/${String(testTodos[1].id)}`)
+    
+    expect(test.status).toBe(404);
+    expect(test.body.status).toBe(404);
+    expect(test.body.message).toBe('todo not found');
+  });
+
   test('GET /todo/id will 401 if user isnt logged in', async () => {
     userId = '';
     loggedIn = false;
