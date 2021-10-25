@@ -13,6 +13,7 @@ routes.get('/todo', controllers.todos.getTodos);
 routes.get('/todo/:todoId', controllers.todos.getTodo);
 routes.post('/todo', controllers.todos.addTodo);
 routes.put('/todo/:todoId', controllers.todos.updateTodo);
+routes.delete('/todo/:todoId', controllers.todos.deleteTodo);
 
 routes.post('/todo/:todoId/step', controllers.todoSteps.addStep);
 routes.put('/todo/:todoId/step/:stepId', controllers.todoSteps.updateStep);

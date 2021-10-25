@@ -160,6 +160,22 @@ describe('POST /todo', () => {
     return;
   });
 
+  test('DELETE /todo/id will delete a todo', async () => {
+    const test = await request(app)
+    .delete(`/todo/${String(testTodos[1].id)}`);
+
+    expect(test.status).toBe(202);
+    expect(test.body.status).toBe(202);
+    expect(test.body.message).toBe('todo deleted');
+
+    const test2 = await request(app)
+    .get('/todo');
+
+    expect(test2.body.todos.length).toBe(1);
+    expect(test2.body.todos[0].id).toBe(testTodos[0].id);
+    return;
+  });
+
   test('GET /todo/id will 401 if user isnt logged in', async () => {
     userId = '';
     loggedIn = false;
