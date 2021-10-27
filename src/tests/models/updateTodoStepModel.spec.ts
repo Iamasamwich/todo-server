@@ -126,8 +126,6 @@ describe('updateTodoStepModel', () => {
     });
   });
 
-  // if (!req.body.step) throw ({status: 406, message: 'no step'});
-
   test ('it 406s with no step in body', () => {
     req.body = {};
     return updateTodoStepModel(req)
@@ -136,8 +134,6 @@ describe('updateTodoStepModel', () => {
       expect(err.message).toBe('no step');
     });
   });
-
-  //   if (typeof(req.body.step) !== 'string') throw ({status: 406, message: 'invalid step'});
 
   test ('it 406s with step not string', () => {
     req.body.step = 1;
