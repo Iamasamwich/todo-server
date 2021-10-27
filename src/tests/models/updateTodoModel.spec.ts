@@ -93,7 +93,7 @@ describe('updateTodoModel', () => {
     return updateTodoModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('no todoid');
     });
   });
 
@@ -102,7 +102,7 @@ describe('updateTodoModel', () => {
     return updateTodoModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('invalid todoid');
     });
   });
 
@@ -113,7 +113,7 @@ describe('updateTodoModel', () => {
     return updateTodoModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('no body');
     });
   });
 

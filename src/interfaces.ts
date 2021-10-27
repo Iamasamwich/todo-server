@@ -14,7 +14,7 @@ export interface TodoWithUser extends Todo {
   userId: string;
 };
 
-export interface TodoWithSteps extends Todo {
+export interface TodoWithSteps extends TodoWithUser {
   steps: Step[];
 };
 

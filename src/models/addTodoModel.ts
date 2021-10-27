@@ -1,7 +1,6 @@
 import { Request } from "express";
 import Conn from "./db";
 import checkUserIsLoggedIn from "./functions/checkUserIsLoggedIn";
-import validateNewTodoReq from "./functions/validateNewTodoReq";
 import addTodoToDB from "./functions/addTodoToDB";
 import getUserDetails from "./functions/getUserDetails";
 import getTodoFromDB from "./functions/getTodoFromDB";
@@ -24,7 +23,15 @@ const addTodoModel = (req : Request) : Promise<AddTodoRes> => {
     if (!resp) throw ({status: 401, message: 'not authorised'})
     return getUserDetails(conn, req.session.userId);
   })
-  .then(() => validateNewTodoReq(req))
+  .then(() => {
+    if (!req.body) throw ({status: 406, message: 'invalid body'});
+    if (!req.body.todo) throw ({status: 406, message: 'no todo'});
+    if (!req.body.dueDate) throw ({status: 406, message: 'no dueDate'});
+    if (typeof(req.body.done) !== 'boolean') throw ({status: 406, message: 'invalid done'});
+    if (typeof(req.body.todo) !== 'string') throw ({status: 406, message: 'invalid todo'});
+    if (!req.body.dueDate.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) throw ({status: 406, message: 'invalid date'});
+    return;
+  })
   .then(() => addTodoToDB(conn, req))
   .then(resp => getTodoFromDB(conn, String(resp.insertId)))
   .then(todo => getTodoSteps(conn, todo))

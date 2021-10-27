@@ -2,7 +2,6 @@ import { Request } from "express";
 import addTodoModel from "../../models/addTodoModel";
 import addTodoStepModel from "../../models/addTodoStepModel";
 import addUserModel from "../../models/addUserModel";
-import addTodoToDB from "../../models/functions/addTodoToDB";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 import getTodosModel from "../../models/getTodosModel";
 
@@ -57,17 +56,17 @@ describe('addTodoStepModel', () => {
     return addTodoStepModel(req) 
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('no todoId');
     });
   });
 
   test('it 406s with no body', () => {
-    req.params.userId = testTodos[0].id;
+    req.params.todoId = testTodos[0].id;
     delete req.body;
     return addTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('no body');
     });
   });
 
@@ -77,7 +76,7 @@ describe('addTodoStepModel', () => {
     return addTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('invalid todoId in path');
     });
   });
 
@@ -86,7 +85,7 @@ describe('addTodoStepModel', () => {
     return addTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('no step');
     });
   });
 
@@ -95,7 +94,7 @@ describe('addTodoStepModel', () => {
     return addTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('invalid step');
     });
   });
 
@@ -104,7 +103,7 @@ describe('addTodoStepModel', () => {
     return addTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('invalid done');
     });
   });
 

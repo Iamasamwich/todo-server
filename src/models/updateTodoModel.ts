@@ -3,23 +3,8 @@ import Conn from "./db";
 import checkUserIsLoggedIn from "./functions/checkUserIsLoggedIn";
 import updateTodoInDB from "./functions/updateTodoInDB";
 import getTodoFromDB from "./functions/getTodoFromDB";
-import validateNewTodoReq from "./functions/validateNewTodoReq";
 import getUserDetails from "./functions/getUserDetails";
 import { TodoWithSteps } from '../interfaces';
-
-// export interface Todo {
-//   userId: string;
-//   id: number;
-//   todo: string;
-//   done: boolean;
-//   dueDate: string;
-//   steps: {
-//     done: boolean;
-//     step: string;
-//     id: number;
-//     todoId: number;
-//   }[];
-// };
 
 const updateTodoModel = (req : Request) : Promise<{status: number, message: string, todo: TodoWithSteps}> => {
 
@@ -31,11 +16,18 @@ const updateTodoModel = (req : Request) : Promise<{status: number, message: stri
     return;
   })
   .then(() => {
-    if (!req.params || !req.params.todoId || isNaN(Number(req.params.todoId))) throw ({status: 406, message: 'invalid'});
+    if (!req.params) throw ({status: 406, message: 'no params'});
+    if (!req.params.todoId) throw ({status: 406, message: 'no todoid'});
+    if (isNaN(Number(req.params.todoId))) throw ({status: 406, message: 'invalid todoid'});
+    if (!req.body) throw ({status: 406, message: 'no body'});
+    if (!req.body.todo) throw ({status: 406, message: 'no todo'});
+    if (!req.body.dueDate) throw ({status: 406, message: 'no dueDate'});
+    if (typeof(req.body.done) !== 'boolean') throw ({status: 406, message: 'invalid done'});
+    if (typeof(req.body.todo) !== 'string') throw ({status: 406, message: 'invalid todo'});
+    if (!req.body.dueDate.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) throw ({status: 406, message: 'invalid duedate'});
     return;
   })
   .then(() => getUserDetails(conn, req.session.userId))
-  .then(() => validateNewTodoReq(req))
   .then(() => getTodoFromDB(conn, req.params.todoId))
   .then(todo => {
     if (todo.userId !== req.session.userId) throw ({status: 401, message: 'not authorised'});

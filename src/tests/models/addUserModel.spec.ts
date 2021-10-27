@@ -20,7 +20,7 @@ describe('/models/functions/addUserToDB', () => {
     return addUserModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('no body');
     });
   });
 

@@ -18,13 +18,12 @@ describe('logInModel', () => {
   test('it 406s with an invalid body', () => {
     delete req.session.userId;
     delete req.session.loggedIn;
-    req.body = {
-    };
+    delete req.body;
     
     return logInModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('no body');
     });
   });
 

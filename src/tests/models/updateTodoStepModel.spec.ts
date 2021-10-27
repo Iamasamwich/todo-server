@@ -65,7 +65,7 @@ describe('updateTodoStepModel', () => {
     return updateTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('no todoid');
     });
   });
 
@@ -74,17 +74,26 @@ describe('updateTodoStepModel', () => {
     return updateTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('invalid todoid');
+    });
+  });
+
+  test('it 406s with no stepId in params', () => {
+    req.params.todoId = String(testTodos[0].id);
+    return updateTodoStepModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no stepid');
     });
   });
 
   test('it 406s with no body', () => {
-    req.params.todoId = String(testTodos[0].id);
+    req.params.stepId = String(testTodos[0].steps[0].id);
     delete req.body;
     return updateTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('no body');
     });
   });
 
@@ -95,16 +104,7 @@ describe('updateTodoStepModel', () => {
     return updateTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
-    });
-  });
-
-  test('it 406s with no stepId in params', () => {
-    req.body.done = true;
-    return updateTodoStepModel(req)
-    .catch(err => {
-      expect(err.status).toBe(406);
-      expect(err.message).toBe('invalid');
+      expect(err.message).toBe('invalid done');
     });
   });
 
@@ -135,6 +135,8 @@ describe('updateTodoStepModel', () => {
 
   test('it 404s if there is no step to update', () => {
     req.params.stepId = '1';
+    req.body.done = true;
+
     return updateTodoStepModel(req)
     .catch(err => {
       expect(err.status).toBe(404);
@@ -143,11 +145,9 @@ describe('updateTodoStepModel', () => {
   });
 
   test('it updates a todo step', () => {
+    req.body.step = 'updated step test';
     req.params.stepId = String(testTodos[0].steps[0].id);
-    req.body = {
-      step: 'updated step test',
-      done: true
-    };
+    
     return updateTodoStepModel(req)
     .then(resp => {
       expect(resp.status).toBe(202);

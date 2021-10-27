@@ -10,11 +10,9 @@ const deleteTodoModel = (req : Request) : Promise<{status: number, message: stri
 
   return checkUserIsLoggedIn(req)
   .then(() => {
-    if (
-      !req.params ||
-      !req.params.todoId ||
-      isNaN(Number(req.params.todoId))
-    ) throw ({status : 406, message: 'invalid'});
+    if (!req.params) throw ({status: 406, message: 'invalid params'});
+    if (!req.params.todoId) throw ({status: 406, message: 'no todoId'});
+    if (isNaN(Number(req.params.todoId))) throw ({status: 406, message: 'invalid todoId'});
     return;
   })
   .then(() => getTodoFromDB(conn, req.params.todoId))

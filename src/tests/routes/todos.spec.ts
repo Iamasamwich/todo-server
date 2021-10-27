@@ -99,7 +99,7 @@ describe('POST /todo', () => {
 
     expect(test.status).toBe(406);
     expect(test.body.status).toBe(406);
-    expect(test.body.message).toBe('invalid');
+    expect(test.body.message).toBe('invalid done');
     return;
   });
 
