@@ -51,6 +51,18 @@ describe('addTodoStepModel', () => {
     });
   });
 
+  test('it 406s with no params', () => {
+    const req2 = {
+      session: req.session,
+    } as Request;
+
+    return addTodoStepModel(req2)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid path');
+    });
+  });
+
   test ('it 406s with no todoId in params', () => {
     req.body = {};
     return addTodoStepModel(req) 

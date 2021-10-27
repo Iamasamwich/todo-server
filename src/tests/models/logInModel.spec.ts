@@ -27,6 +27,46 @@ describe('logInModel', () => {
     });
   });
 
+  test ('it 406s with no email', () => {
+    req.body = {};
+    
+    return logInModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no email');
+    });
+  });
+
+  test ('it 406s with email not a string', () => {
+    req.body.email = 1;
+
+    return logInModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid email');
+    });
+  });
+
+  test ('it 406s with no password', () => {
+    req.body.email = 'loginModel test';
+
+    return logInModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no password');
+    });
+  });
+
+  test ('it 406s without a string pword', () => {
+    req.body.pword = 1;
+
+    return logInModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid password');
+    });
+  });
+
   test('it 404s with an non-existant email', () => {
     req.body = {
       email: 'incorrect email',

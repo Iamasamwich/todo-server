@@ -98,8 +98,18 @@ describe('addTodoModel', () => {
     });
   });
 
-  test('it 406s if the date is the wrong format', () => {
+  test('it 406s if there is no due date', () => {
     req.body.todo = 'test todo';
+    delete req.body.dueDate;
+
+    return addTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no dueDate');
+    });
+  });
+
+  test('it 406s if the date is the wrong format', () => {
     req.body.dueDate = 'wrong format';
 
     return addTodoModel(req)

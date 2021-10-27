@@ -1,10 +1,7 @@
 import { Request } from "express";
 import addTodoModel from "../../models/addTodoModel";
 import addUserModel from "../../models/addUserModel";
-import Conn from "../../models/db";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
-import getTodosFromDB from "../../models/functions/getTodosFromDB";
-import getUserDetails from "../../models/functions/getUserDetails";
 import getTodosModel from "../../models/getTodosModel";
 import updateTodoModel from "../../models/updateTodoModel";
 
@@ -81,6 +78,18 @@ describe('updateTodoModel', () => {
     });
   });
 
+  test ('it 406s with no params', () => {
+    const req4 = {
+      session: req.session
+    } as Request;
+
+    return updateTodoModel(req4)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no params');
+    });
+  });
+
   test('it 401s with no session', () => {
     return updateTodoModel(req3)
     .catch(err => {
@@ -114,6 +123,58 @@ describe('updateTodoModel', () => {
     .catch(err => {
       expect(err.status).toBe(406);
       expect(err.message).toBe('no body');
+    });
+  });
+
+  test ('it 406s with no todo', () => {
+    req.body = {};
+
+    return updateTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no todo');
+    });
+  });
+
+  test ('it 406s with no dueDate', () => {
+    req.body.todo = 'updated test todo';
+
+    return updateTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no dueDate');
+    });
+  });
+
+  test ('it 406s with no done', () => {
+    req.body.dueDate = '2021-12-02';
+
+    return updateTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid done');
+    });    
+  });
+
+  test ('it 406s with wrong todo type', () => {
+    req.body.done = true;
+    req.body.todo = 1;
+
+    return updateTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid todo');
+    });  
+  });
+
+  test ('it 406s with invalid dueDate', () => {
+    req.body.todo = 'updated test todo';
+    req.body.dueDate = 'hello';
+
+    return updateTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid duedate');
     });
   });
 

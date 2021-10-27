@@ -51,11 +51,21 @@ describe('getTodoModel', () => {
     });
   });
 
-  test('it gets the todo', () => {
+  test ('it 406s if the todoId is not a "number"', () => {
     req.body = {};
     req.params = {
-      todoId: testTodos[0].id
+      todoId: 'hello'
     };
+
+    return getTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid todoid');
+    });
+  });
+
+  test('it gets the todo', () => {
+    req.params.todoId = testTodos[0].id;
 
     return getTodoModel(req)
     .then(resp => {

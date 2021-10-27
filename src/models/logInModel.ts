@@ -15,7 +15,7 @@ const logInModel = (req : Request) => {
     if (!req.body) throw ({status: 406, message: 'no body'});
     if (!req.body.email) throw ({status: 406, message: 'no email'});
     if (typeof(req.body.email) !== 'string') throw ({status: 406, message: 'invalid email'});
-    if (!req.body.pword) throw ({status: 406, message: 'no email'});
+    if (!req.body.pword) throw ({status: 406, message: 'no password'});
     if (typeof(req.body.pword) !== 'string') throw ({status: 406, message: 'invalid password'});
     return;
   })

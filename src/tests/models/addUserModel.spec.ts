@@ -24,7 +24,63 @@ describe('/models/functions/addUserToDB', () => {
     });
   });
 
-  test('it adds a user to the db', () => {
+  test ('it 406s with no email', () => {
+    req.body = {};
+    return addUserModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no email');
+    });
+  });
+
+  test ('it 406s with the wrong type of email', () => {
+    req.body.email = 1;
+
+    return addUserModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid email');
+    });
+  });
+
+  test ('it 406s without a name', () => {
+    req.body.email = 'addUserModel test';
+
+    return addUserModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no name');
+    });
+  });
+
+  test ('it 406s with an invalid name type', () => {
+    req.body.name = 1;
+    return addUserModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid name');
+    });
+  })
+
+  test ('it 406s with no pword', () => {
+    req.body.name = 'addUserModel test';
+    return addUserModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no password');
+    });
+  });
+
+  test ('it 406s with the wrong pword type', () => {
+    req.body.pword = 1;
+    return addUserModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid password');
+    });
+  });
+
+  test('it adds a user to the db and logs them in', () => {
     req.body =  {
       email: 'test add user email',
       name: 'test name',
@@ -35,14 +91,12 @@ describe('/models/functions/addUserToDB', () => {
     .then(resp => {
       expect(resp.status).toBe(201);
       expect(resp.message).toBe('user created');
-    });
-  });
-
-  test('the user has been added and logged in', () => {
-    return getUserModel(req)
-    .then(resp => {
-      expect(req.session.loggedIn).toBe(true);
+      expect(req.session).toBeTruthy();
       expect(req.session.userId).toBeTruthy();
+      expect(req.session.loggedIn).toBe(true);
+      return getUserModel(req)
+    })
+    .then(resp => {
       expect(resp.status).toBe(200);
       expect(resp.message).toBe('user fetched');
       expect(resp.user.email).toBe('test add user email');

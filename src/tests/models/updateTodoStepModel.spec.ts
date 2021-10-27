@@ -4,7 +4,6 @@ import addTodoStepModel from "../../models/addTodoStepModel";
 import addUserModel from "../../models/addUserModel";
 import deleteUserFromDB from "../../models/functions/deleteUserFromDB";
 import getTodosModel from "../../models/getTodosModel";
-import updateTodoModel from "../../models/updateTodoModel";
 import updateTodoStepModel from "../../models/updateTodoStepModel";
 
 describe('updateTodoStepModel', () => {
@@ -14,6 +13,8 @@ describe('updateTodoStepModel', () => {
     session: {},
     params: {}
   } as Request;
+
+  const req2 = {} as Request;
 
   interface Todos {
     id: number,
@@ -60,6 +61,24 @@ describe('updateTodoStepModel', () => {
     });
   });
 
+  test ('it 401s with no session', () => {
+    return updateTodoStepModel(req2)
+    .catch(err => {
+      expect(err.status).toBe(401);
+      expect(err.message).toBe('not authorised');
+    });
+  });
+
+  test ('it 406s with no params', () => {
+    req2.session = req.session;
+
+    return updateTodoStepModel(req2)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no params');
+    });
+  });
+
   test('it 406s with no todoId in params', () => {
     req.params = {};
     return updateTodoStepModel(req)
@@ -87,6 +106,16 @@ describe('updateTodoStepModel', () => {
     });
   });
 
+  test ('it 406s if the stepId is not a "number"', () => {
+    req.params.stepId = 'hello';
+
+    return updateTodoStepModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid stepid');
+    });    
+  });
+
   test('it 406s with no body', () => {
     req.params.stepId = String(testTodos[0].steps[0].id);
     delete req.body;
@@ -94,6 +123,29 @@ describe('updateTodoStepModel', () => {
     .catch(err => {
       expect(err.status).toBe(406);
       expect(err.message).toBe('no body');
+    });
+  });
+
+  // if (!req.body.step) throw ({status: 406, message: 'no step'});
+
+  test ('it 406s with no step in body', () => {
+    req.body = {};
+    return updateTodoStepModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no step');
+    });
+  });
+
+  //   if (typeof(req.body.step) !== 'string') throw ({status: 406, message: 'invalid step'});
+
+  test ('it 406s with step not string', () => {
+    req.body.step = 1;
+
+    return updateTodoStepModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid step');
     });
   });
 

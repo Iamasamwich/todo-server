@@ -11,6 +11,10 @@ const updateTodoStepModel = (req : Request) : Promise<{status: number, message: 
   const conn = new Conn();
 
   return checkUserIsLoggedIn(req)
+  .then(resp => {
+    if (!resp) throw ({status: 401, message: 'not authorised'});
+    return;
+  })
   .then(() => {
     if (!req.params) throw ({status: 406, message: 'no params'});
     if (!req.params.todoId) throw ({status: 406, message: 'no todoid'});

@@ -36,6 +36,28 @@ describe('deleteTodoModel', () => {
     });
   });
 
+  test ('it 406s with no params', () => {
+    const req3 = {
+      session: req.session
+    } as Request;
+
+    return deleteTodoModel(req3)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('invalid params');
+    });
+  });
+
+  test ('it 406s with no todoId', () => {
+    req.params = {};
+
+    return deleteTodoModel(req)
+    .catch(err => {
+      expect(err.status).toBe(406);
+      expect(err.message).toBe('no todoId');
+    });
+  });
+
   test('it 401s if the wrong user tries to delete a todo', () => {
     req2.body = {name: 'deleteTodoModel test 2', email: 'deleteTodoModel test 2', pword: 'test'};
     return addUserModel(req2)
