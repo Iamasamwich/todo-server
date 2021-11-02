@@ -31,7 +31,7 @@ const addUserModel = (req: Request) => {
   .then(() => ({status: 201, message: 'user created'}))
   .finally(() => {
     conn.end();
-  })
+  });
 };
 
 export default addUserModel;

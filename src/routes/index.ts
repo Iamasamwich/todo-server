@@ -7,6 +7,8 @@ routes.get('/ping', controllers.users.ping)
 
 routes.post('/user', controllers.users.addUser);
 routes.put('/user/password', controllers.users.updatePassword);
+routes.get('/user', controllers.users.getUser);
+routes.put('/user', controllers.users.updateUser);
 routes.post('/login', controllers.users.logInUser);
 routes.put('/login', controllers.users.logOutUser);
 
