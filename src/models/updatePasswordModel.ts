@@ -23,14 +23,12 @@ const updatePasswordModel = (req : Request) => {
     if (typeof(req.body.newPword) !== 'string') throw ({status: 406, message: 'invalid new password'});
     return;
   })
-  // validate old pword
   .then(() => getUserDetails(conn, req.session.userId))
   .then(user => compareHash(user.pword, req.body.pword))
   .then(pwordMatch => {
     if (pwordMatch === false) throw ({status: 401, message: 'Password Incorrect'});
     return;
   })
-  // update pword in db
   .then(() => makeHash(req.body.newPword))
   .then(newPword => updatePasswordInDB(conn, newPword, req.session.userId))
   .then(() => ({status: 202, message: 'Password Updated'}))

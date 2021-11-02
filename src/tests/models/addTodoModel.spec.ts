@@ -130,16 +130,6 @@ describe('addTodoModel', () => {
     });
   });
 
-  // test('it 406s if body.done is the wrong type', () => {
-  //   req.body.done = 'hello';
-
-  //   return addTodoModel(req)
-  //   .catch(err => {
-  //     expect(err.status).toBe(406);
-  //     expect(err.message).toBe('invalid');
-  //   });
-  // });
-
   test('it adds a todo', () => {
     req.body.done = false;
 
