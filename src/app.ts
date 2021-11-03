@@ -36,7 +36,10 @@ app.use((req, res, next) => {
 });
 
 const whiteListOrigins : Array<string | undefined> = [
-  'http://localhost:3001'
+  'http://localhost:3000', //app in browser
+  'http://localhost:3001', //client app in browser
+  'http://192.168.43.5:3001', //open on phone
+  undefined
 ];
 
 app.use(cors({
