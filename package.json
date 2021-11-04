@@ -2,10 +2,10 @@
   "name": "todo-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
-    "dev": "nodemon --config nodemon.json src/app.ts",
+    "dev": "DBPATH=localhost DBUSER=root DBPASS=root DBNAME=todo DBPORT=3306 COOKIE=cookie pm2-runtime start ecosystem.config.js --env devlopement --watch",
     "test": "jest --coverage --detectOpenHandles --verbose"
   },
   "author": "",
