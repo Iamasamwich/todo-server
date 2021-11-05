@@ -28,10 +28,13 @@ app.use(session({
 }));
 
 app.use((req, res, next) => {
+  console.log('xxxxxxxxxxxxxxxxxxxxxx');
   console.log('source', req.ip);
   console.log('method', req.method);
   console.log('route', req.path);
   console.log('session id', req.session.id);
+  console.log('yyyyyyyyyyyyyyyyyyyyyyyyy');
+  
   next();
 });
 

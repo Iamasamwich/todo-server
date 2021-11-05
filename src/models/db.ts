@@ -16,10 +16,10 @@ class Conn {
 
   constructor() {
     this.config = {
-      host: process.env.DBHOST,
-      user: process.env.DBUSER,
-      password: process.env.DBPWORD,
-      database: process.env.DBNAME,
+      host: process.env.DBPATH as string,
+      user: process.env.DBUSER as string,
+      password: process.env.DBPASS as string,
+      database: process.env.DBNAME as string,
       dateStrings: true
     };
     this.conn = mysql.createConnection(this.config);
@@ -29,9 +29,9 @@ class Conn {
     return new Promise((resolve, reject) => {
       this.conn.query(message, payload, (err: any, res: any) => {
         if (err) {
-          // console.log(err);
-          // console.log('message: ', message);
-          // console.log('payload: ', payload);
+          console.log(err);
+          console.log('message: ', message);
+          console.log('payload: ', payload);
           reject({status: 500, message: 'server error'});
         } else {
           resolve(res);

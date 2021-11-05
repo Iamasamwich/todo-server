@@ -42,10 +42,12 @@ app.use((0, express_session_1.default)({
     }
 }));
 app.use(function (req, res, next) {
+    console.log('xxxxxxxxxxxxxxxxxxxxxx');
     console.log('source', req.ip);
     console.log('method', req.method);
     console.log('route', req.path);
     console.log('session id', req.session.id);
+    console.log('yyyyyyyyyyyyyyyyyyyyyyyyy');
     next();
 });
 var whiteListOrigins = [

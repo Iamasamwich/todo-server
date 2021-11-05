@@ -5,8 +5,8 @@
   "main": "src/app.js",
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
-    "pmdev": "pm2-runtime start ecosystem.config.js --env devlopement --watch",
-    "dev": "nodemon ./src/app.ts --config ./nodemon.json",
+    "pmdev": "pm2-runtime start ecosystem.config.js --env development --watch",
+    "dev": "nodemon ./src/app.ts --config ./nodemon.json --env development",
     "test": "DBPATH=localhost DBUSER=root DBPASS=root DBNAME=todo DBPORT=3306 COOKIE=cookie jest --coverage --detectOpenHandles --verbose",
     "deploy": "git add . && git commit -m heroku && git push heroku master",
     "heroku-postbuild": "npm install pm2"
