@@ -35,9 +35,6 @@ describe('get /', () => {
     
     const regex = new RegExp('^<!doctype html>');
 
-    console.log(test.text);
-    
-
     expect(test.headers['content-type']).toBe('text/html; charset=UTF-8');
     expect(regex.test(test.text)).toBe(true);
     return;
