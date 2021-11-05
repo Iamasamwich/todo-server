@@ -2,7 +2,7 @@ module.exports = {
   apps: [{
     script: 'dist/app.js',
     watch: '.',
-    env: {
+    env_development: {
       NODE_ENV: 'development',
       PORT: 3000,
       DBPATH: "localhost",
