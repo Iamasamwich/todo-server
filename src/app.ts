@@ -8,6 +8,8 @@ dotenv.config();
 
 console.log(process.env.COOKIE);
 console.log(process.env.PORT);
+console.log(process.env.HOST);
+
 
 declare module 'express-session' {
   interface SessionData {
@@ -43,6 +45,7 @@ const whiteListOrigins : Array<string | undefined> = [
   'http://localhost:3001', //client app in browser
   'http://192.168.43.5:3001', //open on phone
   `http://${process.env.HOST}:${process.env.PORT}`, //for prod
+  `http://${process.env.HOST}`,
   undefined
 ];
 

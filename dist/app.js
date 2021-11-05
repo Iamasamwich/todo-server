@@ -30,6 +30,7 @@ var routes_1 = __importDefault(require("./routes"));
 dotenv.config();
 console.log(process.env.COOKIE);
 console.log(process.env.PORT);
+console.log(process.env.HOST);
 ;
 var app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -55,6 +56,7 @@ var whiteListOrigins = [
     'http://localhost:3001',
     'http://192.168.43.5:3001',
     "http://" + process.env.HOST + ":" + process.env.PORT,
+    "http://" + process.env.HOST,
     undefined
 ];
 app.use((0, cors_1.default)({
