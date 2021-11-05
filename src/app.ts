@@ -6,6 +6,9 @@ import routes from './routes';
 
 dotenv.config();
 
+console.log(process.env.COOKIE);
+console.log(process.env.PORT);
+
 declare module 'express-session' {
   interface SessionData {
     userId?: string;
@@ -17,7 +20,7 @@ const app = express();
 app.use(express.json());
 
 app.use(session({
-  secret: 'backflips are for crickets',
+  secret: process.env.COOKIE as string,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -39,6 +42,7 @@ const whiteListOrigins : Array<string | undefined> = [
   'http://localhost:3000', //app in browser
   'http://localhost:3001', //client app in browser
   'http://192.168.43.5:3001', //open on phone
+  `http://${process.env.HOST}:${process.env.PORT}`, //for prod
   undefined
 ];
 

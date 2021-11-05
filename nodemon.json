@@ -6,7 +6,13 @@
     "ts": "node -r ts-node/register"   
   },
   "env": {
-    "NODE_ENV": "development"
+    "NODE_ENV": "development",
+    "PORT": 3000,
+    "DBPASS": "root",
+    "DBUSER": "root",
+    "DBPORT": 3306,
+    "DBPATH": "localhost",
+    "COOKIE": "nodemon_cookie" 
   },
   "ext": "js,json,ts"
 }
