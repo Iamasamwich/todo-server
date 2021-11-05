@@ -6,10 +6,7 @@ import routes from './routes';
 
 dotenv.config();
 
-console.log(process.env.COOKIE);
-console.log(process.env.PORT);
-console.log(process.env.HOST);
-
+console.log(process.env);
 
 declare module 'express-session' {
   interface SessionData {
