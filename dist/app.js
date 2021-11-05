@@ -28,7 +28,6 @@ var cors_1 = __importDefault(require("cors"));
 var dotenv = __importStar(require("dotenv"));
 var routes_1 = __importDefault(require("./routes"));
 dotenv.config();
-console.log(process.env);
 ;
 var app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -50,6 +49,8 @@ app.use(function (req, res, next) {
     next();
 });
 var whiteListOrigins = [
+    'http://things-to-do-todo-app.herokuapp.com',
+    'https://things-to-do-todo-app.herokuapp.com',
     'http://localhost:3000',
     'http://localhost:3001',
     'http://192.168.43.5:3001',

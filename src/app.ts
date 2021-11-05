@@ -6,8 +6,6 @@ import routes from './routes';
 
 dotenv.config();
 
-console.log(process.env);
-
 declare module 'express-session' {
   interface SessionData {
     userId?: string;
@@ -38,6 +36,8 @@ app.use((req, res, next) => {
 });
 
 const whiteListOrigins : Array<string | undefined> = [
+  'http://things-to-do-todo-app.herokuapp.com',
+  'https://things-to-do-todo-app.herokuapp.com',
   'http://localhost:3000', //app in browser
   'http://localhost:3001', //client app in browser
   'http://192.168.43.5:3001', //open on phone
