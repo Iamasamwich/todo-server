@@ -34,7 +34,6 @@ app.use((req, res, next) => {
   console.log('route', req.path);
   console.log('session id', req.session.id);
   console.log('yyyyyyyyyyyyyyyyyyyyyyyyy');
-  
   next();
 });
 

@@ -1,4 +1,5 @@
-# YET ANOTHER TODO APP
+# THINGS TO DO
+### (YET ANOTHER TODO APP)
 
 ## Specs
 
@@ -13,8 +14,6 @@ Node, Express, Typescript, Mysql.
 Will be written with React.
 
 See [the client repo](https://github.com/Iamasamwich/todo-client)
-
-(if that's a dead link it's because I haven't started it yet....)
 
 ## Installation
 
@@ -31,4 +30,22 @@ todo-server\>`npm install`
 * run the tests
 
 todo-server\>`npm test`
+
+* start the server
+
+todo-server\>`npm run pmdev`
+
+* navigate to http://localhost:3000 to view the app.
+
+## Deployment
+
+* deployed at [things-to-do-todo-app.herokuapp.com](http://things-to-do-todo-app.herokuapp.com)
+
+## Todo
+
+* fix bug with due dates: dueDate has 10 hour time zone where today's date is midnight.
+* improve mobile styling: add margin to right of todo steps
+* add reset feature to change todo and steps to not done
+
+
 

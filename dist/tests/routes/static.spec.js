@@ -67,7 +67,8 @@ describe('get /', function () {
                         .get('/')];
                 case 1:
                     test = _a.sent();
-                    regex = new RegExp('^<!DOCTYPE html');
+                    regex = new RegExp('^<!doctype html>');
+                    console.log(test.text);
                     expect(test.headers['content-type']).toBe('text/html; charset=UTF-8');
                     expect(regex.test(test.text)).toBe(true);
                     return [2 /*return*/];
