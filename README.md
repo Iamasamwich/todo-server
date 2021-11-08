@@ -11,7 +11,7 @@ Node, Express, Typescript, Mysql.
 
 ### Frontend
 
-Will be written with React.
+Written as a PWA with React, Redux, Typescript, and using react-datepicker.
 
 See [the client repo](https://github.com/Iamasamwich/todo-client)
 
