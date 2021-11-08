@@ -31,7 +31,7 @@ CREATE TABLE `todo` (
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
   CONSTRAINT `todo_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4813 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5038 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,6 @@ CREATE TABLE `todo` (
 
 LOCK TABLES `todo` WRITE;
 /*!40000 ALTER TABLE `todo` DISABLE KEYS */;
-INSERT INTO `todo` VALUES (4086,'$2b$10$qS2WnZDktUH4hTIJ17FcHOiufWbWeoGilwoqsi7LsUdIYaplbvXLC','Todo App',0,'2021-11-04'),(4810,'$2b$10$qS2WnZDktUH4hTIJ17FcHOiufWbWeoGilwoqsi7LsUdIYaplbvXLC','Portfolio',0,'2021-11-03');
 /*!40000 ALTER TABLE `todo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,7 +58,7 @@ CREATE TABLE `todoStep` (
   PRIMARY KEY (`id`),
   KEY `todoId` (`todoId`),
   CONSTRAINT `todoStep_ibfk_1` FOREIGN KEY (`todoId`) REFERENCES `todo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2359 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2501 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +67,6 @@ CREATE TABLE `todoStep` (
 
 LOCK TABLES `todoStep` WRITE;
 /*!40000 ALTER TABLE `todoStep` DISABLE KEYS */;
-INSERT INTO `todoStep` VALUES (1874,4086,'Better error messages',0),(2332,4086,'change ShowTodo to not include timezone in dueDate',0),(2341,4086,'styling on step ticks',1),(2344,4086,'add config vars to server',1),(2345,4086,'create db online',1),(2346,4086,'push app to heroku',0),(2347,4810,'add typescript',0),(2348,4810,'when todo app done add it to portfolio',0),(2349,4086,'clean up console.logs',1),(2356,4086,'remove todos from state on logout',1),(2357,4086,'Fix up readme',0),(2358,4086,'update server to handle config vars',0);
 /*!40000 ALTER TABLE `todoStep` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +94,6 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('$2b$10$qS2WnZDktUH4hTIJ17FcHOiufWbWeoGilwoqsi7LsUdIYaplbvXLC','sam@iamasamwich.com','Sam','$2b$10$x0KNrKDQu3v2/xRdP0Tj0uT7SAblZZVN6BuPM9YM9jCXSikUtG2yW');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -109,4 +106,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-05 14:09:57
+-- Dump completed on 2021-11-08 15:21:22

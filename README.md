@@ -44,7 +44,6 @@ todo-server\>`npm run pmdev`
 ## Todo
 
 * fix bug with due dates: dueDate has 10 hour time zone where today's date is midnight.
-* improve mobile styling: add margin to right of todo steps
 * add reset feature to change todo and steps to not done
 
 
