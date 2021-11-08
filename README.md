@@ -17,7 +17,9 @@ See [the client repo](https://github.com/Iamasamwich/todo-client)
 
 ## Installation
 
-* clone the repo
+For these instructions to work you will need to have Node, NPM, and MySQL installed on your machine.
+
+* Go to the directory where you want the app to sit and clone the repo
 
 \>`git clone https://github.com/Iamasamwich/todo-server`
 
@@ -27,15 +29,49 @@ See [the client repo](https://github.com/Iamasamwich/todo-client)
 
 todo-server\>`npm install`
 
+* Use Mysql to create the database
+
+todo-server\>`mysql -u root -p`
+
+mysql\>`create database [db-name];`  (db-name is what you want to call it eg. todo)
+
+mysql\>`exit;`
+
+todo-server\>`mysqldump -u root -p [db-name] < todoDB.sql`
+
+* update nodemon.json with your local mysql parameters
+
+```
+"env": {
+    "NODE_ENV": "development",
+    "PORT": 3000,
+    "DBNAME": "[db-name]",
+    "DBPASS": "[your-local-mysql-password]",
+    "DBUSER": "[your-local-mysql-username]",
+    "DBPATH": "localhost",
+    "COOKIE": "cookie"
+  },
+```
+
+* update ./package.json with your local mysql parameters
+
+```
+  "scripts": {
+    ...
+    "test": "DBNAME=[db-name] DBPASS=[your-local-mysql-password] DBUSER=[your-local-mysql-username] DBPATH=localhost COOKIE=cookie jest --coverage --detectOpenHandles --verbose",
+    ...
+  }
+```
+
 * run the tests
 
 todo-server\>`npm test`
 
 * start the server
 
-todo-server\>`npm run pmdev`
+todo-server\>`npm run dev`
 
-* navigate to http://localhost:3000 to view the app.
+* navigate to http://localhost:3000 to use the app.
 
 ## Deployment
 
