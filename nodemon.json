@@ -8,11 +8,11 @@
   "env": {
     "NODE_ENV": "development",
     "PORT": 3000,
+    "DBNAME": "todo",
     "DBPASS": "root",
     "DBUSER": "root",
-    "DBPORT": 3306,
     "DBPATH": "localhost",
-    "COOKIE": "nodemon_cookie" 
+    "COOKIE": "cookie"
   },
   "ext": "js,json,ts"
 }

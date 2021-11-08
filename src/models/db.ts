@@ -29,9 +29,9 @@ class Conn {
     return new Promise((resolve, reject) => {
       this.conn.query(message, payload, (err: any, res: any) => {
         if (err) {
-          // console.log(err);
-          // console.log('message: ', message);
-          // console.log('payload: ', payload);
+          console.log(err);
+          console.log('message: ', message);
+          console.log('payload: ', payload);
           reject({status: 500, message: 'server error'});
         } else {
           resolve(res);

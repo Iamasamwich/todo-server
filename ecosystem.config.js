@@ -9,7 +9,6 @@ module.exports = {
       DBUSER: "root",
       DBPASS: "root",
       DBNAME: "todo",
-      DBPORT: 3306,
       COOKIE: "pmdev_cookie"
     },
     env_production: {
