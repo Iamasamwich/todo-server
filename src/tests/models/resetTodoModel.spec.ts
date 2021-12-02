@@ -17,7 +17,10 @@ describe('resetTodoModel', () => {
     params: {}
   } as Request;
 
-  const req2 = {} as Request;
+  const req2 = {
+    body: {},
+    session: {}
+  } as Request;
 
   test('it creates a test user with todos and steps', () => {
     req.body = {
@@ -33,7 +36,6 @@ describe('resetTodoModel', () => {
         dueDate: '2021-12-01',
         done: true
       };
-
       return addTodoModel(req);
     })
     .then(() => getTodosModel(req))
@@ -60,7 +62,7 @@ describe('resetTodoModel', () => {
       req.body = {
         step: 'reset todo step 3',
         done: true
-      }
+      };
       return addTodoStepModel(req);
     });
   });
@@ -73,8 +75,17 @@ describe('resetTodoModel', () => {
     });
   });
 
+  test('it adds a second user', () => {
+    req2.body = {
+      name: 'reset todo test 2',
+      email: 'reset todo test 2',
+      pword: 'test'
+    };
+
+    return addUserModel(req2);
+  });
+
   test('it 406s with no params', () => {
-    req2.session = req.session;
     return resetTodoModel(req2)
     .catch(err => {
       expect(err.status).toBe(406);
@@ -97,11 +108,21 @@ describe('resetTodoModel', () => {
     .catch(err => {
       expect(err.status).toBe(406);
       expect(err.message).toBe('invalid todo id');
-    })
-  })
+    });
+  });
+
+  test('it wont update another users todos', () => {
+    req2.params.todoId = String(testTodos[0].id);
+    return resetTodoModel(req2)
+    .catch(err => {
+      expect(err.status).toBe(401);
+      expect(err.message).toBe('not authorised');
+    });
+  });
 
   test('it resets the todo and steps', () => {
     req.body = {};
+    
     return resetTodoModel(req)
     .then(resp => {
       expect(resp.status).toBe(202);
@@ -115,6 +136,7 @@ describe('resetTodoModel', () => {
 
   test('it deletes the test user', () => {
     deleteUserFromDB('reset todo test');
+    deleteUserFromDB('reset todo test 2');
     return;
   });
 });
