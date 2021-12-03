@@ -79,8 +79,8 @@ todo-server\>`npm run dev`
 
 ## Todo
 
-* fix bug with due dates: dueDate has 10 hour time zone where today's date is midnight.
-* add reset feature to change todo and steps to not done
+* <s>fix bug with due dates: dueDate has 10 hour time zone where today's date is midnight.</s>
+* <s>add reset feature to change todo and steps to not done</s>
 
 
 
