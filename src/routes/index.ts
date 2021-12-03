@@ -16,6 +16,7 @@ routes.get('/todo', controllers.todos.getTodos);
 routes.get('/todo/:todoId', controllers.todos.getTodo);
 routes.post('/todo', controllers.todos.addTodo);
 routes.put('/todo/:todoId', controllers.todos.updateTodo);
+routes.put('/todo/:todoId/reset', controllers.todos.resetTodo);
 routes.delete('/todo/:todoId', controllers.todos.deleteTodo);
 
 routes.post('/todo/:todoId/step', controllers.todoSteps.addStep);

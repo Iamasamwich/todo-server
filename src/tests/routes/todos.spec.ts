@@ -160,6 +160,40 @@ describe('POST /todo', () => {
     return;
   });
 
+
+  test('PUT /todo/id/reset will reset the todo', async () => {
+    const addTodoStep1 = await request(app)
+    .post(`/todo/${testTodos[0].id}/step`)
+    .send({step: 'reset step test', done: true})
+
+    const addTodoStep2 = await request(app)
+    .post(`/todo/${testTodos[0].id}/step`)
+    .send({step: 'reset step test 2', done: true});
+
+    const fred = await request(app)
+    .get(`/todo/${String(testTodos[0].id)}`);
+
+    const test = await request(app)
+    .put(`/todo/${testTodos[0].id}/reset`);
+
+    expect(test.status).toBe(202);
+    expect(test.body.status).toBe(202);
+    expect(test.body.message).toBe('todo reset');
+    expect(test.body.todo.done).toBeFalsy();
+    expect(test.body.todo.steps[0].done).toBeFalsy();
+    expect(test.body.todo.steps[1].done).toBeFalsy();
+  });
+
+  test('PUT /todo/id/reset throws an error when the todoid doesnt exist', async () => {
+    const test = await request(app)
+    .put('/todo/fred/reset');
+
+    expect(test.status).toBe(406);
+    expect(test.body.status).toBe(406);
+    expect(test.body.message).toBe('invalid todo id');
+  });
+
+
   test('DELETE /todo/id will delete a todo', async () => {
     const test = await request(app)
     .delete(`/todo/${String(testTodos[1].id)}`);

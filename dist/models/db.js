@@ -43,9 +43,9 @@ var Conn = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             _this.conn.query(message, payload, function (err, res) {
                 if (err) {
-                    console.log(err);
-                    console.log('message: ', message);
-                    console.log('payload: ', payload);
+                    // console.log(err);
+                    // console.log('message: ', message);
+                    // console.log('payload: ', payload);
                     reject({ status: 500, message: 'server error' });
                 }
                 else {

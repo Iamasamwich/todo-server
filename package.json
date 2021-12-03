@@ -8,6 +8,7 @@
     "pmdev": "pm2-runtime start ecosystem.config.js --env development --watch",
     "dev": "nodemon ./src/app.ts --config ./nodemon.json --env development",
     "test": "DBNAME=todo DBPASS=root DBUSER=root DBPATH=localhost COOKIE=cookie jest --coverage --detectOpenHandles --verbose",
+    "typecheck": "tsc -w",
     "heroku-postbuild": "npm install pm2"
   },
   "author": "",
